@@ -272,17 +272,37 @@ body{background:#08090A}
 /* ── ① 속도 반응 : 스크롤이 빠를수록 늘어난다 ── */
 .is-hero__bg,.is-reel__ph{will-change:transform}
 
+/* ── 섹션 배경 사진 ────────────────────────────────────────────
+   바탕이 검정 하나뿐이라 뒤로 갈수록 허전했다. 이미 내장된 사진을
+   그대로 재사용한다(새 바이트 0). 스크롤에 따라 천천히 밀린다. */
+/* 핀 구간(200~230vh)에서는 이 레이어를 섹션이 아니라 '핀 안'에 둔다.
+   섹션 전체에 깔면 이미지 상자가 화면의 세 배가 되고 object-fit:cover 가
+   그만큼 확대해 잘라낸다. 핀은 이미 100svh 라 그대로 화면 크기가 된다. */
+.is-bgw{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.is-bgw img{position:absolute;left:0;top:-16%;width:100%;height:132%;
+  object-fit:cover;opacity:.13;filter:grayscale(.55) contrast(1.04);will-change:transform}
+/* 두 겹으로 덮는다: 가장자리를 바탕색으로 접고, 글자가 앉는 가운데를 한 번 더 눌러
+   대비를 확보한다. 한 겹만으로는 밝은 음식 사진에서 글자가 묻힌다. */
+.is-bgw::after{content:'';position:absolute;inset:0;
+  background:radial-gradient(130% 100% at 50% 45%,transparent 0%,var(--bg) 68%),
+             linear-gradient(180deg,var(--bg) 0%,rgba(0,0,0,.45) 34%,rgba(0,0,0,.45) 66%,var(--bg) 100%)}
+.is-end .is-bgw img{opacity:.10}
+.is-val,.is-proc,.is-roster,.is-end{position:relative}
+.is-val .is-wrap,.is-proc .is-wrap,.is-roster .is-wrap{position:relative;z-index:1}
+
 /* ── VALUE : 문장을 스크롤로 훑는다 ────────────────────────────
    실측상 이 구간은 0.64vh 짜리 정적 문단이었다. 길이를 주고, 스크롤
    진행률이 단어를 하나씩 밝힌다 — 시간이 아니라 스크롤이 구동한다. */
 .is-val{height:200vh;padding:0}
-.is-val__pin{position:sticky;top:0;height:100svh;display:flex;align-items:center}
+.is-val__pin{position:sticky;top:0;height:100svh;display:flex;align-items:center;
+  overflow:hidden}
 .is-val p i{font-style:inherit;color:var(--t4);transition:color 260ms linear}
 .is-val p i.hot{color:var(--bone)}
 
 /* ── PROCESS : 카드가 순서대로 켜진다 ── */
 .is-proc{height:220vh;padding:0}
-.is-proc__pin{position:sticky;top:0;height:100svh;display:flex;align-items:center}
+.is-proc__pin{position:sticky;top:0;height:100svh;display:flex;align-items:center;
+  overflow:hidden}
 .is-st>div{opacity:.24;
   transition:opacity 440ms var(--ex),transform 440ms var(--ex),background var(--d1) var(--eo)}
 .is-st>div.hot{opacity:1;transform:translateY(-12px);background:var(--el)}
@@ -290,11 +310,46 @@ body{background:#08090A}
 .is-prog span{position:absolute;inset:0 auto 0 0;width:0;background:var(--bone)}
 
 /* ── 로스터 : 제목이 목록을 따라 붙는다 ── */
-.is-roster__hd{position:sticky;top:11vh;z-index:1;
-  background:linear-gradient(180deg,var(--bg) 62%,transparent);padding-bottom:22px}
+.is-roster__hd{position:relative;z-index:1}
+/* 목록이 길어 자리를 잃기 쉬우므로 작은 라벨만 붙여둔다.
+   큰 제목까지 따라오면 시야를 가린다. */
+.is-roster__g > .is-lab{position:sticky;top:9vh;z-index:2;
+  background:var(--bg);padding:10px 0;margin-bottom:-4px}
 
 /* ── CTA : 끝맺음에 여백을 준다 ── */
-.is-end{min-height:100svh;display:flex;flex-direction:column;justify-content:center}
+/* 섹션에 overflow:hidden 을 걸면 그 안의 position:sticky 가 죽는다 —
+   스크롤 컨테이너가 새로 생겨 핀이 뷰포트가 아니라 그 상자를 기준으로 잡는다.
+   잘라내기는 핀 자신이 한다. */
+.is-end{min-height:230vh;padding:0}
+.is-end__pin{position:sticky;top:0;height:100svh;overflow:hidden;text-align:center}
+.is-end__stage{position:absolute;inset:0;z-index:1}
+/* 헤드라인과 폼은 각각 핀 전체를 덮는 레이어이고, 그 안에서 가운데 정렬된다.
+   앞선 판은 스테이지 높이가 헤드라인 높이뿐이라 폼이 화면 위로 잘려 나갔다. */
+.is-end__hl,.is-end__form{position:absolute;inset:0;display:grid;place-items:center;
+  padding:0 24px}
+/* 헤드라인과 폼이 같은 자리에 겹쳐 있다. 스크롤이 하나를 빨아들이고
+   그 자리에서 다른 하나가 떠오른다. */
+.is-end__hl{will-change:transform,opacity,filter}
+.is-end__form{opacity:0;pointer-events:none;will-change:transform,opacity}
+.is-end__form.live{pointer-events:auto}
+.is-form{width:100%;max-width:560px;text-align:left;
+  background:rgba(8,9,10,.72);backdrop-filter:blur(14px);
+  padding:clamp(22px,3vw,34px);border-radius:var(--r-lg);
+  box-shadow:inset 0 0 0 1px var(--line),0 40px 90px rgba(0,0,0,.5)}
+.is-form__r{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.is-form label{display:block;font-family:'JBM',ui-monospace,monospace;font-size:10px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:7px}
+.is-form input,.is-form select,.is-form textarea{width:100%;height:46px;padding:0 14px;
+  background:var(--s1);color:var(--t1);border:0;border-radius:var(--r);
+  box-shadow:inset 0 0 0 1px var(--line);font:inherit;font-size:14px;
+  transition:box-shadow var(--d1) var(--eo),background var(--d1) var(--eo)}
+.is-form textarea{height:96px;padding:13px 14px;resize:none;line-height:1.5}
+.is-form input:focus,.is-form select:focus,.is-form textarea:focus{outline:0;
+  box-shadow:inset 0 0 0 1px var(--bone);background:var(--el)}
+.is-form__f{margin-top:14px}
+.is-form .is-btn{width:100%;margin-top:18px}
+@media(max-width:680px){.is-form__r{grid-template-columns:1fr}
+  .is-end{min-height:190vh}}
 
 /* ── Lenis 스무스 스크롤 (dist/lenis.css 원문) ── */
 html.lenis,html.lenis body{height:auto}
@@ -482,6 +537,7 @@ html.lenis,html.lenis body{height:auto}
 <!-- ═══ VALUE ══════════════════════════════════════════ -->
 <section class="is-val" data-bg="#080B0A" data-val>
   <div class="is-val__pin">
+    <div class="is-bgw" data-bgw="4"><img alt=""></div>
     <div class="is-wrap">
       <div class="is-lab">Value</div>
       <!-- ✏️ 기존 문구 그대로 -->
@@ -494,6 +550,7 @@ html.lenis,html.lenis body{height:auto}
 <!-- ═══ PROCESS ════════════════════════════════════════ -->
 <section class="is-proc" data-bg="#0A0A0D" data-proc>
   <div class="is-proc__pin">
+    <div class="is-bgw" data-bgw="9"><img alt=""></div>
   <div class="is-wrap">
     <div class="is-lab">Process</div>
     <!-- ✏️ 리드타임 숫자 -->
@@ -511,6 +568,7 @@ html.lenis,html.lenis body{height:auto}
 <!-- ═══ 전체 클라이언트 목록 ═══════════════════════════ -->
 <!-- ✏️ 전체 목록. docs/clients.md 와 같은 내용을 유지할 것 -->
 <section class="is-sec is-roster" data-bg="#0C0909">
+  <div class="is-bgw" data-bgw="6"><img alt=""></div>
   <div class="is-wrap">
     <div class="is-roster__hd">
       <div class="is-lab is-rev">Client Roster</div>
@@ -530,11 +588,44 @@ html.lenis,html.lenis body{height:auto}
 </section>
 
 <!-- ═══ CTA ════════════════════════════════════════════ -->
-<section class="is-sec is-end" data-bg="#08090A">
-  <div class="is-wrap">
-    <h2 class="is-dis is-rev" data-split>촬영을 계획하고 계신가요</h2>
-    <p class="is-p is-rev">촬영 종류와 시기, 장소만 알려주시면 견적을 바로 보내드립니다.</p>
-    <a class="is-btn is-btn--f is-rev" href="/#s202507306030765e5f569">촬영 문의하기</a>
+<section class="is-end" data-bg="#08090A" data-end>
+  <div class="is-end__pin">
+    <div class="is-bgw" data-bgw="2"><img alt=""></div>
+    <div class="is-end__stage">
+
+      <!-- 스크롤이 이 덩어리를 빨아들인다 -->
+      <div class="is-end__hl" data-end-hl>
+        <h2 class="is-dis is-rev" data-split>촬영을 계획하고 계신가요</h2>
+        <p class="is-p is-rev">촬영 종류와 시기, 장소만 알려주시면 견적을 바로 보내드립니다.</p>
+      </div>
+
+      <!-- 빨려든 자리에서 폼이 떠오른다 -->
+      <!-- ✏️ 아임웹에 넣을 때: 이 폼 블록을 통째로 지우고, 코드 위젯을
+           기존 문의 폼 위젯 '바로 위'에 배치해라. 실제 접수·메일 알림은
+           그 위젯이 처리한다. 여기 폼은 데모용이라 전송되지 않는다. -->
+      <div class="is-end__form" data-end-form>
+        <form class="is-form" onsubmit="return false">
+          <div class="is-form__r">
+            <div><label>회사명</label><input type="text" placeholder="브랜드 · 상호"></div>
+            <div><label>담당자</label><input type="text" placeholder="성함"></div>
+          </div>
+          <div class="is-form__r is-form__f">
+            <div><label>연락처</label><input type="tel" placeholder="010-0000-0000"></div>
+            <div><label>이메일</label><input type="email" placeholder="name@company.com"></div>
+          </div>
+          <div class="is-form__f"><label>촬영 종류</label>
+            <select>
+              <option>푸드</option><option>제품(밀키트)</option><option>공간 · 건축</option>
+              <option>인물 · 프로필 · 행사</option><option>영상 · 스트리밍 · 중계</option><option>기타</option>
+            </select>
+          </div>
+          <div class="is-form__f"><label>촬영 일정 · 장소</label>
+            <textarea placeholder="예) 10월 둘째 주, 서울 성수동 매장"></textarea></div>
+          <a class="is-btn is-btn--f" href="/#s202507306030765e5f569">촬영 문의하기</a>
+        </form>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -693,6 +784,22 @@ if (!window.Lenis) {
   var procCard = [].slice.call(root.querySelectorAll('.is-st > div'));
   var valLit = -1, procLit = -1;
 
+  /* 배경 사진 — 이미 내장된 릴 이미지를 그대로 재사용한다. 새로 받아오는
+     바이트가 0 이고, 페이지 안에서 같은 사진이 다시 스쳐 지나가 결이 붙는다. */
+  var bgws = [].slice.call(root.querySelectorAll('[data-bgw]')).map(function (w) {
+    var src = reelFigs[+w.dataset.bgw % (reelFigs.length || 1)];
+    var im = w.querySelector('img'), from = src && src.querySelector('img');
+    if (im && from) im.src = from.currentSrc || from.src;
+    // 진행률은 핀이 아니라 '섹션' 기준이어야 스크롤 내내 움직인다
+    return { sec: w.closest('section'), im: im };
+  });
+
+  /* CTA — 헤드라인이 화면 쪽으로 빨려들며 흐려지고, 같은 자리에서 폼이
+     떠오른다. 두 요소가 겹쳐 있어 교대가 한 동작으로 읽힌다. */
+  var endSec  = root.querySelector('[data-end]');
+  var endHl   = root.querySelector('[data-end-hl]');
+  var endForm = root.querySelector('[data-end-form]');
+
   /* ── ①② 연속 rAF 루프 ────────────────────────────────────────
      이전에는 scroll 이벤트마다 1회 계산하고 CSS transition 으로 따라가게
      했다. 그러면 스크롤보다 항상 한 박자 늦는다. 여기서는 매 프레임
@@ -786,6 +893,38 @@ if (!window.Lenis) {
         var bi = Math.min(BRANDS.length - 1, Math.floor(e * BRANDS.length));
         if (cFlip.dataset.i !== String(bi)) { cFlip.dataset.i = bi; cFlip.textContent = BRANDS[bi]; }
       }
+      }
+    }
+
+    /* 배경 사진 — 화면 안에 있을 때만 민다 */
+    for (var g = 0; g < bgws.length; g++) {
+      var gr = bgws[g].sec.getBoundingClientRect();
+      if (gr.bottom > 0 && gr.top < innerHeight && bgws[g].im) {
+        var gp = (innerHeight - gr.top) / (innerHeight + gr.height);   // 0~1
+        bgws[g].im.style.transform = 'translate3d(0,' + ((gp - 0.5) * -13).toFixed(2) + '%,0) scale(' +
+          (1.06 - gp * 0.06).toFixed(3) + ')';
+      }
+    }
+
+    /* CTA — 빨려들기 */
+    if (endSec && endHl) {
+      var er = endSec.getBoundingClientRect();
+      var espan = endSec.offsetHeight - innerHeight;
+      var ep = espan > 0 ? Math.min(Math.max(-er.top / espan, 0), 1) : 0;
+      // 앞 22% 는 문장을 읽는 구간, 그 뒤 46% 에 걸쳐 빨려든다
+      var ez = Math.min(Math.max((ep - 0.22) / 0.46, 0), 1);
+      var eo = 1 - Math.pow(ez, 1.6);
+      endHl.style.transform = 'translate3d(0,' + (-ez * 40).toFixed(1) + 'px,0) scale(' +
+        (1 + ez * 2.6).toFixed(3) + ')';
+      endHl.style.opacity = eo.toFixed(3);
+      endHl.style.filter = 'blur(' + (ez * 16).toFixed(1) + 'px)';
+      endHl.style.pointerEvents = ez > 0.5 ? 'none' : 'auto';
+      if (endForm) {
+        var fz = Math.min(Math.max((ep - 0.44) / 0.30, 0), 1);
+        endForm.style.opacity = fz.toFixed(3);
+        endForm.style.transform = 'translate3d(0,' + ((1 - fz) * 46).toFixed(1) +
+          'px,0) scale(' + (0.9 + fz * 0.1).toFixed(3) + ')';
+        endForm.classList.toggle('live', fz > 0.85);
       }
     }
 

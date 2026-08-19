@@ -1132,8 +1132,11 @@ if (!window.Lenis) {
       if (cBar) cBar.style.width = (e * 100) + '%';
       drawIris(e);
       if (cFlip) {
+        // 목록은 인지도 순이라 그대로 흐르면 '가장 덜 알려진 곳'에서 멈춘다.
+        // 마지막 한 컷은 시선이 머무는 자리이므로 대표 클라이언트로 고정한다.
         var bi = Math.min(BRANDS.length - 1, Math.floor(e * BRANDS.length));
-        if (cFlip.dataset.i !== String(bi)) { cFlip.dataset.i = bi; cFlip.textContent = BRANDS[bi]; }
+        var nm = e >= 0.999 ? 'CJ제일제당' : BRANDS[bi];
+        if (cFlip.dataset.n !== nm) { cFlip.dataset.n = nm; cFlip.textContent = nm; }
       }
       }
     }

@@ -60,8 +60,9 @@ body{background:#08090A}
    "화려함"을 담당하는 층. 크게 흐린 색 덩어리 셋이 화면 뒤에서 돌고,
    스크롤이 위치를 민다. screen 블렌드라 검정 위에서만 살고 사진 위에서는
    힘을 잃는다 — 포트폴리오 사진을 덮지 않게 하려는 의도다. */
-.is-aura{position:fixed;inset:-20%;z-index:0;pointer-events:none;
-  filter:blur(min(12vw,150px)) saturate(1.6);opacity:.68;mix-blend-mode:screen}
+.is-aura{position:fixed;inset:-8%;z-index:0;pointer-events:none;
+  filter:blur(min(7vw,86px));opacity:.72;mix-blend-mode:screen;
+  contain:paint;transform:translateZ(0)}
 .is-aura i{position:absolute;display:block;border-radius:50%;will-change:transform}
 .is-aura .a1{width:58vw;height:58vw;left:-6%;top:2%;
   background:radial-gradient(circle,var(--mg) 0%,rgba(255,46,147,.38) 42%,transparent 68%)}
@@ -195,7 +196,11 @@ body{background:#08090A}
 .is-cbg::after{content:'';position:absolute;inset:0;
   background:radial-gradient(62% 66% at 34% 50%,var(--bg) 0%,rgba(6,6,12,.94) 44%,transparent 78%)}
 .is-cbg__r{white-space:nowrap;overflow:hidden}
-.is-cbg__t{display:inline-block;animation:is-run var(--d,60s) linear infinite}
+.is-cbg__t{display:inline-block;animation:is-run var(--d,60s) linear infinite;
+  will-change:transform}
+/* 카운터 구간이 화면 밖이면 8줄이 계속 그려질 이유가 없다. 실측에서 이
+   구간의 페인트 시간이 다른 구간의 4배였다. */
+.is-count:not(.on) .is-cbg__t{animation-play-state:paused}
 .is-cbg__r--r .is-cbg__t{animation-direction:reverse}
 .is-cbg span{font-family:'Anton','PreEB',sans-serif;font-size:clamp(15px,1.9vw,26px);
   color:rgba(244,239,250,.075);letter-spacing:-.02em;margin-right:38px}
@@ -230,17 +235,16 @@ body{background:#08090A}
   color:var(--t3);line-height:1.55;max-width:420px}
 
 /* ── 가로 릴 (핀 고정) ─────────────────────────── */
-.is-reel{position:relative;height:420vh}
-.is-reel__pin{position:sticky;top:0;height:100svh;overflow:hidden;
-  display:flex;flex-direction:column;justify-content:center;
-  perspective:1500px;perspective-origin:50% 46%}
+.is-reel{position:relative;padding:clamp(70px,8vw,120px) 0}
 .is-reel__hd{display:flex;justify-content:space-between;align-items:baseline;
-  padding:0 24px;margin-bottom:22px;max-width:var(--wrap);margin-inline:auto;width:100%}
-.is-reel__tr{display:flex;gap:26px;padding:0 26vw;will-change:transform;
-  transform-style:preserve-3d}
-.is-reel figure{position:relative;flex:0 0 auto;width:clamp(210px,23vw,340px);
-  transform-style:preserve-3d;will-change:transform}
-.is-reel__ph{height:clamp(280px,42vh,440px);overflow:hidden;border-radius:var(--r-lg);
+  margin-bottom:clamp(24px,3vw,44px)}
+/* 세로 갤러리. 지인 피드백: 아래로 굴리던 중 가로 슬라이드가 나오니
+   옆으로 넘기려다 안 넘어가서 당황했다고 했다. 스크롤 방향과 콘텐츠
+   진행 방향을 일치시킨다. 핀과 매 프레임 3D 계산도 함께 사라져 가볍다. */
+.is-reel__g{display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(26px,3.4vw,60px) clamp(20px,2.6vw,44px)}
+.is-reel__g figure:nth-child(2n){margin-top:clamp(38px,7vw,124px)}
+.is-reel__ph{height:clamp(300px,46vh,560px);overflow:hidden;border-radius:var(--r-lg);
   background:var(--el);
   box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 70px -22px rgba(255,46,147,.55)}
 .is-reel img{width:100%;height:100%;object-fit:cover;transition:transform 900ms var(--ex)}
@@ -249,6 +253,11 @@ body{background:#08090A}
   font-family:'JBM',ui-monospace,monospace;
   font-size:clamp(13px,1.05vw,15px);letter-spacing:.1em;
   color:var(--t1);text-transform:uppercase}
+@media(max-width:680px){
+  .is-reel__g{grid-template-columns:1fr;gap:34px}
+  .is-reel__g figure:nth-child(2n){margin-top:0}
+  .is-reel__ph{height:clamp(260px,52vh,420px)}
+}
 
 /* ── SERVICE (스티키) ──────────────────────────── */
 .is-svc{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
@@ -304,11 +313,9 @@ body{background:#08090A}
 }
 @media (max-width:680px){
   .is-wrap{padding:0 18px}
-  .is-reel{height:300vh}
   .is-count{height:140vh}
   .is-val{height:150vh}
   .is-proc{height:170vh}
-  .is-reel__tr{gap:10px;padding:0 18px}
   .is-st{grid-template-columns:repeat(2,1fr)}   /* 2 + 2 + 2 */
   .is-scroll{display:none}
   .is-btn{flex:1 1 auto}
@@ -395,11 +402,13 @@ body{background:#08090A}
 .is-end__form{align-content:start;padding-top:clamp(70px,9vh,110px)}
 /* 헤드라인과 폼이 같은 자리에 겹쳐 있다. 스크롤이 하나를 빨아들이고
    그 자리에서 다른 하나가 떠오른다. */
-.is-end__hl{will-change:transform,opacity,filter}
+/* filter 를 쓰지 않는다. 3.6배로 확대된 요소에 blur 를 걸면 레이어가
+   5184x3240 이 되어 매 프레임 다시 흐려진다 — 렉의 주범이었다. */
+.is-end__hl{will-change:transform,opacity}
 .is-end__form{opacity:0;pointer-events:none;will-change:transform,opacity}
 .is-end__form.live{pointer-events:auto}
 .is-form{width:100%;max-width:560px;text-align:left;
-  background:rgba(8,9,10,.72);backdrop-filter:blur(14px);
+  background:rgba(8,9,10,.72);
   padding:clamp(22px,3vw,34px);border-radius:var(--r-lg);
   box-shadow:inset 0 0 0 1px var(--line),0 40px 90px rgba(0,0,0,.5)}
 .is-form__r{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -414,8 +423,25 @@ body{background:#08090A}
   box-shadow:inset 0 0 0 1px var(--bone);background:var(--el)}
 .is-form__f{margin-top:14px}
 .is-end__box{width:100%;max-width:560px}
+/* 아임웹 폼은 한 줄에 한 칸씩 쌓여 831px 이 나온다 — 화면을 넘겼다.
+   두 열로 접어 높이를 반으로 줄이고 상자를 넓힌다. 체크박스 묶음과
+   문의 내용은 폭이 필요하므로 두 칸을 다 쓴다. */
+.is-end__box--live{max-width:min(940px,100%)}
+.is-end__box--live form{display:grid;grid-template-columns:1fr 1fr;
+  gap:4px clamp(16px,2vw,26px);align-items:start}
+.is-end__box--live form .form-group{margin:0!important;width:auto!important}
+.is-end__box--live form .form-group:has(.checkbox),
+.is-end__box--live form .form-group:has(textarea){grid-column:1/-1}
+.is-end__box--live form .form-group:has(.checkbox) .checkbox{
+  display:inline-flex!important;width:auto!important;margin:0 18px 0 0!important}
+.is-end__box--live .deadline-opacity{width:100%!important}
+.is-end__box--live .form.text-center{margin-top:18px}
+.is-end__box--live .btn-primary{display:block;width:100%;padding:14px 0!important;
+  background:linear-gradient(96deg,#FFC97A 0%,var(--mg) 46%,var(--bl) 100%)!important;
+  color:#160B04!important;border:0!important;border-radius:var(--r)!important;
+  font-weight:700!important;text-align:center}
 /* 아임웹 문의 폼을 이 안으로 옮겼을 때 우리 카드 모양을 입힌다 */
-.is-end__box--live{background:rgba(8,9,10,.74);backdrop-filter:blur(14px);
+.is-end__box--live{background:rgba(8,9,10,.74);
   padding:clamp(20px,2.6vw,30px);border-radius:var(--r-lg);
   box-shadow:inset 0 0 0 1px var(--line),0 40px 90px rgba(0,0,0,.5);text-align:left}
 .is-end__box--live ._widget_data,
@@ -482,6 +508,9 @@ html.lenis,html.lenis body{height:auto}
    우리 섹션이 끝나고 폼이 나오는 지점에서 디자인이 갑자기 바뀌면 다른
    사이트로 넘어간 것처럼 읽힌다. 입력칸과 버튼만 맞춰도 이어진다. */
 body.doz_sys{background:#06060C!important}
+/* 페이지 맨 아래 아임웹 푸터가 흰 배경이라 랜딩이 끝나자마자 흰 띠가 뜬다 */
+.footer-section,.footer-section .section_bg_color{background:#06060C!important}
+.footer-section,.footer-section *{color:rgba(244,239,250,.45)!important;border-color:var(--line)!important}
 ._form-widget input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]),
 ._form-widget textarea,._form-widget select{
   background:rgba(233,226,212,.05)!important;color:#F4EFFA!important;
@@ -640,13 +669,13 @@ body.doz_sys{background:#06060C!important}
 
 <!-- ═══ WORK — 가로로 흐르는 릴 ════════════════════════ -->
 <section class="is-reel" data-reel data-bg="#03121E">
-  <div class="is-reel__pin">
+  <div class="is-wrap">
     <div class="is-reel__hd">
       <h2 class="is-dis" style="font-size:clamp(28px,3.4vw,48px)">Selected Work</h2>
       <a class="is-lab" href="/project" style="color:var(--t2)">전체 보기 →</a>
     </div>
     <!-- ✏️ 사진 10장. figcaption 은 브랜드명 -->
-    <div class="is-reel__tr" data-track>
+    <div class="is-reel__g" data-track>
       <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/d40420412f1a0.jpg" alt=""></div><figcaption>내동집</figcaption></figure>
       <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/b5b5a5a337805.jpg" alt=""></div><figcaption>로바타야키 토라</figcaption></figure>
       <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/a7c335f1000ce.jpg" alt=""></div><figcaption>피자스팟</figcaption></figure>
@@ -835,8 +864,14 @@ if (!window.Lenis) {
   /* 조리개 날개. 앞선 판은 경계선을 '반지름 방향'으로 그어서 수레바퀴처럼
      보였다. 실제 조리개에서 보이는 선은 구멍 다각형의 '변을 밖으로 연장한
      선'이다 — 그래서 나선으로 감긴다. e=0 활짝 → e=1 닫힘. */
+  var irisLast = -1;
   function drawIris(e) {
     if (!cIris) return;
+    // 값이 사실상 그대로면 다시 그리지 않는다. 9개 line 을 innerHTML 로
+    // 새로 만드는 작업이라 매 프레임 돌면 스타일 재계산이 쌓인다.
+    var q = Math.round(e * 400);
+    if (q === irisLast) return;
+    irisLast = q;
     var r = 40 - 37.2 * e;
     var rot = -e * 46 * Math.PI / 180;
     var V = [];
@@ -1007,9 +1042,8 @@ if (!window.Lenis) {
     lenis = new window.Lenis({ lerp: 0.075, smoothWheel: true });
   }
 
-  var LERP = reduce ? 1 : 0.115;
   var lastSy = scrollY, vRaw = 0, vSm = 0;
-  var parY = 0, trX = 0, trXPrev = 0;
+  var parY = 0;
 
   /* ④ 섹션마다 지정된 바탕색을 보간한다. --bg 를 바꾸므로 그 변수를 쓰는
      프로세스 카드 배경까지 같이 따라온다. */
@@ -1074,6 +1108,8 @@ if (!window.Lenis) {
     if (cSec && cNum) {
       var cr = cSec.getBoundingClientRect();
       if (cr.bottom > -200 && cr.top < innerHeight + 200) {
+      var inView = cr.bottom > -100 && cr.top < innerHeight + 100;
+      if (cSec.classList.contains('on') !== inView) cSec.classList.toggle('on', inView);
       var tnow = now || performance.now();
       if (!cPlayed && cr.top <= 2 && cr.bottom > innerHeight * 0.5) {
         cPlayed = true; cRun = true; cT0 = tnow;
@@ -1125,9 +1161,8 @@ if (!window.Lenis) {
       var ez = Math.min(Math.max((ep - 0.40) / 0.28, 0), 1);
       var eo = 1 - Math.pow(ez, 1.6);
       endHl.style.transform = 'translate3d(0,' + (-ez * 40).toFixed(1) + 'px,0) scale(' +
-        (1 + ez * 2.6).toFixed(3) + ')';
+        (1 + ez * 1.15).toFixed(3) + ')';
       endHl.style.opacity = eo.toFixed(3);
-      endHl.style.filter = 'blur(' + (ez * 16).toFixed(1) + 'px)';
       endHl.style.pointerEvents = ez > 0.5 ? 'none' : 'auto';
       if (endForm) {
         var fz = Math.min(Math.max((ep - 0.70) / 0.24, 0), 1);
@@ -1166,43 +1201,9 @@ if (!window.Lenis) {
       }
     }
 
-    if (reel && track) {
-      var rr = reel.getBoundingClientRect();
-      if (rr.bottom > -200 && rr.top < innerHeight + 200) {
-      var span = reel.offsetHeight - innerHeight;
-      var p = span > 0 ? Math.min(Math.max(-rr.top / span, 0), 1) : 0;
-      var dist = Math.max(track.scrollWidth - innerWidth, 0);
-      trXPrev = trX;
-      trX += (-p * dist - trX) * LERP;          // 릴이 스크롤을 늦게 따라온다
-      track.style.transform = 'translate3d(' + trX.toFixed(1) + 'px,0,0)';
-
-      // 릴은 가로로 움직이므로 세로 속도가 아니라 릴 자신의 가로 속도로 민다
-      /* 속도 반응 기울기(skewX)는 뺐다 — 굴릴 때 사진이 미끄러져 보여
-         과했다. 가운데가 정면이고 양쪽이 안쪽으로 돌아가는 3D 원통 배치는
-         그대로 둔다. 늘어남도 아주 옅게만 남긴다. */
-      var tdx  = trX - trXPrev;
-      var strx = 1 + Math.min(Math.abs(tdx) * 0.020, 0.03);
-
-      var cx = innerWidth / 2;
-      for (var i = 0; i < reelFigs.length; i++) {
-        var f = reelFigs[i];
-        var fr = f.getBoundingClientRect();
-        var dd = ((fr.left + fr.width / 2) - cx) / (innerWidth * 0.5);   // -1 ~ 1
-        var ad = Math.min(Math.abs(dd), 1.6);
-        f.style.transform = 'translate3d(0,' + (ad * ad * 52).toFixed(1) + 'px,' +
-          (-ad * ad * 280).toFixed(1) + 'px) rotateY(' + (-dd * 34).toFixed(1) +
-          'deg) scale(' + (1 - ad * 0.10).toFixed(3) + ')';
-        f.style.zIndex = String(100 - Math.round(ad * 50));
-        f.style.filter = 'brightness(' + (1 - ad * 0.42).toFixed(2) + ')';
-
-        var ph = reelPhs[i];
-        if (ph && !reduce) {
-          ph.style.transform = 'scaleX(' + strx.toFixed(4) + ') scaleY(' +
-            (1 - (strx - 1) * 0.5).toFixed(4) + ')';
-        }
-      }
-      }
-    }
+    /* 릴은 세로 갤러리가 되면서 매 프레임 계산이 필요 없어졌다.
+       예전에는 여기서 figure 12개마다 getBoundingClientRect 를 불러
+       3D 원통 배치를 다시 그렸다. 마스크 리빌만 남는다. */
   }
   drawIris(0);
   requestAnimationFrame(frame);

@@ -430,6 +430,12 @@ body{background:#08090A}
 .is-end__box--live form{display:grid;grid-template-columns:1fr 1fr;
   gap:4px clamp(16px,2vw,26px);align-items:start}
 .is-end__box--live form .form-group{margin:0!important;width:auto!important}
+/* 두 칸을 다 쓰는 칸. 회사명·이메일은 값이 길고, 나머지는 폭이 필요하다.
+   이렇게 짝을 맞춰야 빈 칸이 생기지 않는다:
+     회사명 · 담당자명|연락처 · 이메일 · 촬영종류 · 시기|장소 · 예산 · 문의내용 */
+.is-end__box--live form .form-group:first-of-type,
+.is-end__box--live form .form-group:has(.email_wrap),
+.is-end__box--live form .form-group:has(.form-select-wrap),
 .is-end__box--live form .form-group:has(.checkbox),
 .is-end__box--live form .form-group:has(textarea){grid-column:1/-1}
 .is-end__box--live form .form-group:has(.checkbox) .checkbox{
@@ -1252,6 +1258,12 @@ if (!window.Lenis) {
       try {
         box.classList.add('is-end__box--live');
         box.insertBefore(host, box.firstChild);
+        // 아임웹 폼에는 높이 0 짜리 숨은 칸이 섞여 있다. 그대로 두면 격자에서
+        // 한 자리를 차지해 첫 칸(회사명)이 오른쪽으로 밀린다.
+        var groups = host.querySelectorAll('.form-group');
+        for (var g = 0; g < groups.length; g++) {
+          if (groups[g].getBoundingClientRect().height < 4) groups[g].style.display = 'none';
+        }
         var go = root.querySelector('.is-end__go');
         if (go) go.style.display = 'none'; // 폼이 바로 있으니 버튼은 중복이다
         fullBleed(); underHeader(); measure();

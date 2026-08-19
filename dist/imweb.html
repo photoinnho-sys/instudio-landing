@@ -239,7 +239,8 @@ body{background:#08090A}
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
   font-family:'Anton','PreEB',sans-serif;font-weight:400;
   font-size:clamp(72px,14vw,220px);line-height:.82;color:var(--bone);letter-spacing:-.035em;
-  font-variant-numeric:tabular-nums;min-width:2.2em;display:inline-block}
+  font-variant-numeric:tabular-nums;min-width:2.2em;display:inline-block;
+  padding:.14em 0 .08em;margin:-.14em 0 -.08em}
 .is-num i{display:block;margin-top:16px;font-style:normal;font-size:14px;
   color:var(--t3);line-height:1.55;max-width:420px}
 
@@ -332,8 +333,8 @@ body{background:#08090A}
   .is-hero h1{font-size:clamp(34px,10.5vw,46px)}
   .is-hero__sub{margin-top:14px}
   .is-cta{margin-top:22px}
-  .is-val{height:150vh}
-  .is-proc{height:170vh}
+  .is-val{height:104vh}
+  .is-proc{height:108vh}
   .is-st{grid-template-columns:repeat(2,1fr)}   /* 2 + 2 + 2 */
   .is-scroll{display:none}
   .is-btn{flex:1 1 auto}
@@ -379,14 +380,14 @@ body{background:#08090A}
 /* ── VALUE : 문장을 스크롤로 훑는다 ────────────────────────────
    실측상 이 구간은 0.64vh 짜리 정적 문단이었다. 길이를 주고, 스크롤
    진행률이 단어를 하나씩 밝힌다 — 시간이 아니라 스크롤이 구동한다. */
-.is-val{height:200vh;padding:0}
+.is-val{height:118vh;padding:0}
 .is-val__pin{position:sticky;top:0;height:100svh;display:flex;align-items:center;
   overflow:hidden}
 .is-val p i{font-style:inherit;color:var(--t4);transition:color 260ms linear}
 .is-val p i.hot{color:var(--bone);text-shadow:0 0 28px rgba(255,46,147,.22)}
 
 /* ── PROCESS : 카드가 순서대로 켜진다 ── */
-.is-proc{height:220vh;padding:0}
+.is-proc{height:118vh;padding:0}
 .is-proc__pin{position:sticky;top:0;height:100svh;display:flex;align-items:center;
   overflow:hidden}
 .is-st>div{opacity:.24;
@@ -721,16 +722,16 @@ body.doz_sys{background:#06060C!important}
     </div>
     <!-- ✏️ 사진 10장. figcaption 은 브랜드명 -->
     <div class="is-reel__g" data-track>
-      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/d40420412f1a0.jpg" alt=""></div><figcaption>내동집</figcaption></a></figure>
-      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/b5b5a5a337805.jpg" alt=""></div><figcaption>로바타야키 토라</figcaption></a></figure>
-      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/a7c335f1000ce.jpg" alt=""></div><figcaption>피자스팟</figcaption></a></figure>
-      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/fc7fce5a5e98d.jpg" alt=""></div><figcaption>샐러드 마비에</figcaption></a></figure>
-      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/fe9ad2186a0a8.jpeg" alt=""></div><figcaption>지누스</figcaption></a></figure>
-      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/92189e3d29d28.jpg" alt=""></div><figcaption>구전국밥</figcaption></a></figure>
-      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/ae6ad68a237b3.jpg" alt=""></div><figcaption>더본코리아</figcaption></a></figure>
-      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/aa9b22cc64cf1.jpg" alt=""></div><figcaption>샐러드 마비에</figcaption></a></figure>
-      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/b8292aa85bf60.jpg" alt=""></div><figcaption>삼성 R&amp;D</figcaption></a></figure>
-      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/2b57924037618.jpg" alt=""></div><figcaption>롯데유통군</figcaption></a></figure>
+      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/d40420412f1a0.jpg" alt=""></div><figcaption>내동집</figcaption></figure>
+      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/b5b5a5a337805.jpg" alt=""></div><figcaption>로바타야키토라</figcaption></figure>
+      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/a7c335f1000ce.jpg" alt=""></div><figcaption>피자스팟</figcaption></figure>
+      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/fc7fce5a5e98d.jpg" alt=""></div><figcaption>샐러드마비에</figcaption></figure>
+      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/fe9ad2186a0a8.jpeg" alt=""></div><figcaption>지누스</figcaption></figure>
+      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/92189e3d29d28.jpg" alt=""></div><figcaption>구전국밥</figcaption></figure>
+      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/ae6ad68a237b3.jpg" alt=""></div><figcaption>더본코리아</figcaption></figure>
+      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/aa9b22cc64cf1.jpg" alt=""></div><figcaption>샐러드마비에</figcaption></figure>
+      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/b8292aa85bf60.jpg" alt=""></div><figcaption>삼성R&amp;D</figcaption></figure>
+      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/2b57924037618.jpg" alt=""></div><figcaption>롯데유통군</figcaption></figure>
     </div>
   </div>
 </section>
@@ -1032,6 +1033,11 @@ if (!window.Lenis) {
   var procBar  = root.querySelector('[data-proc-bar]');
   var procCard = [].slice.call(root.querySelectorAll('.is-st > div'));
   var valLit = -1, procLit = -1;
+  /* VALUE·PROCESS 도 조리개처럼 자동 재생한다. 스크롤에 매달아 두면 굴리는
+     속도에 따라 문장이 뚝뚝 끊기고, 빠르게 지나가면 아예 안 읽힌다.
+     구간에 닿으면 스스로 재생한다. 다만 조리개와 달리 스크롤은 잠그지
+     않는다 — 한 페이지에서 세 번이나 붙잡으면 답답해진다. */
+  var valT0 = 0, procT0 = 0;
   var aura = [].slice.call(root.querySelectorAll('.is-aura i'));
 
   /* ── 풀블리드 ────────────────────────────────────────────────────
@@ -1236,9 +1242,10 @@ if (!window.Lenis) {
        나머지는 다 읽을 여유로 남긴다. */
     if (valSec && valWords.length) {
       var vr = valSec.getBoundingClientRect();
-      var vspan = valSec.offsetHeight - innerHeight;
-      var vp = vspan > 0 ? Math.min(Math.max(-vr.top / vspan, 0), 1) : 0;
-      var lit = Math.round(Math.min(Math.max((vp - 0.08) / 0.77, 0), 1) * valWords.length);
+      var vnow = now || performance.now();
+      if (!valT0 && vr.top <= innerHeight * 0.34 && vr.bottom > innerHeight * 0.4) valT0 = vnow;
+      var vp = valT0 ? Math.min((vnow - valT0) / 2400, 1) : 0;
+      var lit = Math.round(vp * valWords.length);
       // 문장은 20단어 남짓이라 바뀔 때 통째로 다시 칠해도 싸다
       if (lit !== valLit) {
         for (var w = 0; w < valWords.length; w++) valWords[w].classList.toggle('hot', w < lit);
@@ -1249,9 +1256,9 @@ if (!window.Lenis) {
     /* PROCESS — 카드가 순서대로 켜지고 진행선이 따라간다 */
     if (procSec && procCard.length) {
       var pr = procSec.getBoundingClientRect();
-      var pspan = procSec.offsetHeight - innerHeight;
-      var pp = pspan > 0 ? Math.min(Math.max(-pr.top / pspan, 0), 1) : 0;
-      var pe = Math.min(Math.max((pp - 0.06) / 0.80, 0), 1);
+      var pnow = now || performance.now();
+      if (!procT0 && pr.top <= innerHeight * 0.34 && pr.bottom > innerHeight * 0.4) procT0 = pnow;
+      var pe = procT0 ? Math.min((pnow - procT0) / 2200, 1) : 0;
       if (procBar) procBar.style.width = (pe * 100) + '%';
       var act = Math.min(procCard.length, Math.ceil(pe * procCard.length));
       if (act !== procLit) {

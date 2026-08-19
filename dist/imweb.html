@@ -251,6 +251,8 @@ body{background:#08090A}
   .is-wrap{padding:0 18px}
   .is-reel{height:300vh}
   .is-count{height:130vh}
+  .is-val{height:150vh}
+  .is-proc{height:170vh}
   .is-reel__tr{gap:10px;padding:0 18px}
   .is-st{grid-template-columns:1fr}
   .is-scroll{display:none}
@@ -270,6 +272,39 @@ body{background:#08090A}
 /* ── ① 속도 반응 : 스크롤이 빠를수록 늘어난다 ── */
 .is-hero__bg,.is-reel__ph{will-change:transform}
 
+/* ── VALUE : 문장을 스크롤로 훑는다 ────────────────────────────
+   실측상 이 구간은 0.64vh 짜리 정적 문단이었다. 길이를 주고, 스크롤
+   진행률이 단어를 하나씩 밝힌다 — 시간이 아니라 스크롤이 구동한다. */
+.is-val{height:200vh;padding:0}
+.is-val__pin{position:sticky;top:0;height:100svh;display:flex;align-items:center}
+.is-val p i{font-style:inherit;color:var(--t4);transition:color 260ms linear}
+.is-val p i.hot{color:var(--bone)}
+
+/* ── PROCESS : 카드가 순서대로 켜진다 ── */
+.is-proc{height:220vh;padding:0}
+.is-proc__pin{position:sticky;top:0;height:100svh;display:flex;align-items:center}
+.is-st>div{opacity:.24;
+  transition:opacity 440ms var(--ex),transform 440ms var(--ex),background var(--d1) var(--eo)}
+.is-st>div.hot{opacity:1;transform:translateY(-12px);background:var(--el)}
+.is-prog{height:1px;background:var(--line);position:relative;margin-top:0}
+.is-prog span{position:absolute;inset:0 auto 0 0;width:0;background:var(--bone)}
+
+/* ── 로스터 : 제목이 목록을 따라 붙는다 ── */
+.is-roster__hd{position:sticky;top:11vh;z-index:1;
+  background:linear-gradient(180deg,var(--bg) 62%,transparent);padding-bottom:22px}
+
+/* ── CTA : 끝맺음에 여백을 준다 ── */
+.is-end{min-height:100svh;display:flex;flex-direction:column;justify-content:center}
+
+/* ── Lenis 스무스 스크롤 (dist/lenis.css 원문) ── */
+html.lenis,html.lenis body{height:auto}
+.lenis:not(.lenis-autoToggle).lenis-stopped{overflow:clip}
+.lenis [data-lenis-prevent],.lenis [data-lenis-prevent-wheel],
+.lenis [data-lenis-prevent-touch],.lenis [data-lenis-prevent-vertical],
+.lenis [data-lenis-prevent-horizontal]{overscroll-behavior:contain}
+.lenis.lenis-smooth iframe{pointer-events:none}
+.lenis.lenis-autoToggle{transition-property:overflow;transition-duration:1ms;
+  transition-behavior:allow-discrete}
 @media (prefers-reduced-motion:reduce){
   .is-rev,.is-word>i{transition:none!important;opacity:1!important;transform:none!important}
   .is-mrev{clip-path:none!important}
@@ -445,26 +480,31 @@ body{background:#08090A}
 </section>
 
 <!-- ═══ VALUE ══════════════════════════════════════════ -->
-<section class="is-sec is-val" data-bg="#080B0A">
-  <div class="is-wrap">
-    <div class="is-lab is-rev">Value</div>
-    <!-- ✏️ 기존 문구 그대로 -->
-    <p class="is-rev">아이엔 스튜디오는 기계처럼 찍어내는 공장식 촬영을 하지 않습니다.
-      단 하나의 브랜드, 기업의 아이덴티티를 포착하여 브랜딩합니다.</p>
+<section class="is-val" data-bg="#080B0A" data-val>
+  <div class="is-val__pin">
+    <div class="is-wrap">
+      <div class="is-lab">Value</div>
+      <!-- ✏️ 기존 문구 그대로 -->
+      <p data-scrub>아이엔 스튜디오는 기계처럼 찍어내는 공장식 촬영을 하지 않습니다.
+        단 하나의 브랜드, 기업의 아이덴티티를 포착하여 브랜딩합니다.</p>
+    </div>
   </div>
 </section>
 
 <!-- ═══ PROCESS ════════════════════════════════════════ -->
-<section class="is-sec" data-bg="#0A0A0D">
+<section class="is-proc" data-bg="#0A0A0D" data-proc>
+  <div class="is-proc__pin">
   <div class="is-wrap">
-    <div class="is-lab is-rev">Process</div>
+    <div class="is-lab">Process</div>
     <!-- ✏️ 리드타임 숫자 -->
-    <div class="is-st is-rev">
+    <div class="is-st">
       <div><b>01</b><h4>문의</h4><p>촬영 종류 · 시기 · 장소를 남겨주시면 당일 확인합니다.</p></div>
       <div><b>02</b><h4>견적</h4><p>영업일 1일 내 회신. 정기 협업 시 단가 조정이 가능합니다.</p></div>
       <div><b>03</b><h4>촬영</h4><p>일정 협의 후 진행. 전국 출장과 해외 촬영이 가능합니다.</p></div>
       <div><b>04</b><h4>납품</h4><p>보정 완료본을 촬영 후 5~7일 내 전달합니다.</p></div>
     </div>
+    <div class="is-prog"><span data-proc-bar></span></div>
+  </div>
   </div>
 </section>
 
@@ -472,8 +512,10 @@ body{background:#08090A}
 <!-- ✏️ 전체 목록. docs/clients.md 와 같은 내용을 유지할 것 -->
 <section class="is-sec is-roster" data-bg="#0C0909">
   <div class="is-wrap">
-    <div class="is-lab is-rev">Client Roster</div>
-    <h2 class="is-dis is-h2 is-rev" style="margin-top:12px">함께한 브랜드</h2>
+    <div class="is-roster__hd">
+      <div class="is-lab is-rev">Client Roster</div>
+      <h2 class="is-dis is-h2 is-rev" style="margin-top:12px">함께한 브랜드</h2>
+    </div>
 
     <div class="is-roster__g is-rev">
       <div class="is-lab">Corporate · 기업 · 기관</div>
@@ -497,6 +539,17 @@ body{background:#08090A}
 </section>
 
 </div>
+
+<!-- ══ Lenis 1.3.26 (번들 내장) ═══════════════════════════════════
+     아임웹 사이트에는 Lenis 가 이미 깔려 있다. 두 벌이 동시에 돌면
+     스크롤을 서로 뺏는다. 그래서 window.Lenis 가 없을 때만 실행한다.
+     CDN 대신 내장한 이유: 아티팩트는 CSP 로 외부 스크립트를 막는다. -->
+<script>
+if (!window.Lenis) {
+(function(){var e=`1.3.26`;function t(e,t,n){return Math.max(e,Math.min(t,n))}function n(e,t,n){return(1-n)*e+n*t}function r(e,t,r,i){return n(e,t,1-Math.exp(-r*i))}function i(e,t){return(e%t+t)%t}var a=class{isRunning=!1;value=0;from=0;to=0;currentTime=0;lerp;duration;easing;onUpdate;advance(e){if(!this.isRunning)return;let n=!1;if(this.duration&&this.easing){this.currentTime+=e;let r=t(0,this.currentTime/this.duration,1);n=r>=1;let i=n?1:this.easing(r);this.value=this.from+(this.to-this.from)*i}else this.lerp?(this.value=r(this.value,this.to,this.lerp*60,e),Math.round(this.value)===Math.round(this.to)&&(this.value=this.to,n=!0)):(this.value=this.to,n=!0);n&&this.stop(),this.onUpdate?.(this.value,n)}stop(){this.isRunning=!1}fromTo(e,t,{lerp:n,duration:r,easing:i,onStart:a,onUpdate:o}){this.from=this.value=e,this.to=t,this.lerp=n,this.duration=r,this.easing=i,this.currentTime=0,this.isRunning=!0,a?.(),this.onUpdate=o}};function o(e,t){let n;return function(...r){clearTimeout(n),n=setTimeout(()=>{n=void 0,e.apply(this,r)},t)}}var s=class{width=0;height=0;scrollHeight=0;scrollWidth=0;debouncedResize;wrapperResizeObserver;contentResizeObserver;constructor(e,t,{autoResize:n=!0,debounce:r=250}={}){this.wrapper=e,this.content=t,n&&(this.debouncedResize=o(this.resize,r),this.wrapper instanceof Window?window.addEventListener(`resize`,this.debouncedResize):(this.wrapperResizeObserver=new ResizeObserver(this.debouncedResize),this.wrapperResizeObserver.observe(this.wrapper)),this.contentResizeObserver=new ResizeObserver(this.debouncedResize),this.contentResizeObserver.observe(this.content)),this.resize()}destroy(){this.wrapperResizeObserver?.disconnect(),this.contentResizeObserver?.disconnect(),this.wrapper===window&&this.debouncedResize&&window.removeEventListener(`resize`,this.debouncedResize)}resize=()=>{this.onWrapperResize(),this.onContentResize()};onWrapperResize=()=>{this.wrapper instanceof Window?(this.width=window.innerWidth,this.height=window.innerHeight):(this.width=this.wrapper.clientWidth,this.height=this.wrapper.clientHeight)};onContentResize=()=>{this.wrapper instanceof Window?(this.scrollHeight=this.content.scrollHeight,this.scrollWidth=this.content.scrollWidth):(this.scrollHeight=this.wrapper.scrollHeight,this.scrollWidth=this.wrapper.scrollWidth)};get limit(){return{x:this.scrollWidth-this.width,y:this.scrollHeight-this.height}}},c=class{events={};emit(e,...t){let n=this.events[e]||[];for(let e=0,r=n.length;e<r;e++)n[e]?.(...t)}on(e,t){return this.events[e]?this.events[e].push(t):this.events[e]=[t],()=>{this.events[e]=this.events[e]?.filter(e=>t!==e)}}off(e,t){this.events[e]=this.events[e]?.filter(e=>t!==e)}destroy(){this.events={}}};let l={passive:!1};function u(e,t){return e===1?16.666666666666668:e===2?t:1}var d=class{touchStart={x:0,y:0};lastDelta={x:0,y:0};window={width:0,height:0};emitter=new c;constructor(e,t={wheelMultiplier:1,touchMultiplier:1}){this.element=e,this.options=t,window.addEventListener(`resize`,this.onWindowResize),this.onWindowResize(),this.element.addEventListener(`wheel`,this.onWheel,l),this.element.addEventListener(`touchstart`,this.onTouchStart,l),this.element.addEventListener(`touchmove`,this.onTouchMove,l),this.element.addEventListener(`touchend`,this.onTouchEnd,l)}on(e,t){return this.emitter.on(e,t)}destroy(){this.emitter.destroy(),window.removeEventListener(`resize`,this.onWindowResize),this.element.removeEventListener(`wheel`,this.onWheel,l),this.element.removeEventListener(`touchstart`,this.onTouchStart,l),this.element.removeEventListener(`touchmove`,this.onTouchMove,l),this.element.removeEventListener(`touchend`,this.onTouchEnd,l)}onTouchStart=e=>{let{clientX:t,clientY:n}=e.targetTouches?e.targetTouches[0]:e;this.touchStart.x=t,this.touchStart.y=n,this.lastDelta={x:0,y:0},this.emitter.emit(`scroll`,{deltaX:0,deltaY:0,event:e})};onTouchMove=e=>{let{clientX:t,clientY:n}=e.targetTouches?e.targetTouches[0]:e,r=-(t-this.touchStart.x)*this.options.touchMultiplier,i=-(n-this.touchStart.y)*this.options.touchMultiplier;this.touchStart.x=t,this.touchStart.y=n,this.lastDelta={x:r,y:i},this.emitter.emit(`scroll`,{deltaX:r,deltaY:i,event:e})};onTouchEnd=e=>{this.emitter.emit(`scroll`,{deltaX:this.lastDelta.x,deltaY:this.lastDelta.y,event:e})};onWheel=e=>{let{deltaX:t,deltaY:n,deltaMode:r}=e,i=u(r,this.window.width),a=u(r,this.window.height);t*=i,n*=a,t*=this.options.wheelMultiplier,n*=this.options.wheelMultiplier,this.emitter.emit(`scroll`,{deltaX:t,deltaY:n,event:e})};onWindowResize=()=>{this.window={width:window.innerWidth,height:window.innerHeight}}};let f=e=>Math.min(1,1.001-2**(-10*e));var p=class{_isScrolling=!1;_isStopped=!1;_isLocked=!1;_preventNextNativeScrollEvent=!1;_resetVelocityTimeout=null;_rafId=null;_isDraggingSelection=!1;reducedMotionMediaQuery=window.matchMedia(`(prefers-reduced-motion: reduce)`);isTouching;isIos;time=0;userData={};lastVelocity=0;velocity=0;direction=0;options;targetScroll;animatedScroll;animate=new a;emitter=new c;dimensions;virtualScroll;constructor({wrapper:t=window,content:n=document.documentElement,eventsTarget:r=t,smoothWheel:i=!0,syncTouch:a=!1,syncTouchLerp:o=.075,touchInertiaExponent:c=1.7,duration:l,easing:u,lerp:p=.1,infinite:m=!1,orientation:h=`vertical`,gestureOrientation:g=h===`horizontal`?`both`:`vertical`,touchMultiplier:_=1,wheelMultiplier:v=1,autoResize:y=!0,prevent:b,virtualScroll:x,overscroll:S=!0,autoRaf:C=!1,anchors:w=!1,autoToggle:T=!1,allowNestedScroll:E=!1,__experimental__naiveDimensions:D=!1,naiveDimensions:O=D,stopInertiaOnNavigate:k=!1,respectReducedMotion:A=!0}={}){window.lenisVersion=e,window.lenis||(window.lenis={}),window.lenis.version=e,h===`horizontal`&&(window.lenis.horizontal=!0),a===!0&&(window.lenis.touch=!0),this.isIos=/(iPad|iPhone|iPod)/g.test(navigator.userAgent),(!t||t===document.documentElement)&&(t=window),typeof l==`number`&&typeof u!=`function`?u=f:typeof u==`function`&&typeof l!=`number`&&(l=1),this.options={wrapper:t,content:n,eventsTarget:r,smoothWheel:i,syncTouch:a,syncTouchLerp:o,touchInertiaExponent:c,duration:l,easing:u,lerp:p,infinite:m,gestureOrientation:g,orientation:h,touchMultiplier:_,wheelMultiplier:v,autoResize:y,prevent:b,virtualScroll:x,overscroll:S,autoRaf:C,anchors:w,autoToggle:T,allowNestedScroll:E,naiveDimensions:O,stopInertiaOnNavigate:k,respectReducedMotion:A},this.dimensions=new s(t,n,{autoResize:y}),this.updateClassName(),this.targetScroll=this.animatedScroll=this.actualScroll,this.options.wrapper.addEventListener(`scroll`,this.onNativeScroll),this.options.wrapper.addEventListener(`scrollend`,this.onScrollEnd,{capture:!0}),(this.options.anchors||this.options.stopInertiaOnNavigate)&&this.options.wrapper.addEventListener(`click`,this.onClick),this.options.wrapper.addEventListener(`pointerdown`,this.onPointerDown),this.virtualScroll=new d(r,{touchMultiplier:_,wheelMultiplier:v}),this.virtualScroll.on(`scroll`,this.onVirtualScroll),this.options.autoToggle&&(this.checkOverflow(),this.rootElement.addEventListener(`transitionend`,this.onTransitionEnd)),this.options.autoRaf&&(this._rafId=requestAnimationFrame(this.raf))}destroy(){this.emitter.destroy(),this.options.wrapper.removeEventListener(`scroll`,this.onNativeScroll),this.options.wrapper.removeEventListener(`scrollend`,this.onScrollEnd,{capture:!0}),this.options.wrapper.removeEventListener(`pointerdown`,this.onPointerDown),(this.options.anchors||this.options.stopInertiaOnNavigate)&&this.options.wrapper.removeEventListener(`click`,this.onClick),this.virtualScroll.destroy(),this.dimensions.destroy(),this.cleanUpClassName(),this._rafId&&cancelAnimationFrame(this._rafId)}on(e,t){return this.emitter.on(e,t)}off(e,t){return this.emitter.off(e,t)}onScrollEnd=e=>{e instanceof CustomEvent||(this.isScrolling===`smooth`||this.isScrolling===!1)&&e.stopPropagation()};dispatchScrollendEvent=()=>{this.options.wrapper.dispatchEvent(new CustomEvent(`scrollend`,{bubbles:this.options.wrapper===window,detail:{lenisScrollEnd:!0}}))};get overflow(){let e=this.isHorizontal?`overflow-x`:`overflow-y`;return getComputedStyle(this.rootElement)[e]}checkOverflow(){[`hidden`,`clip`].includes(this.overflow)?this.internalStop():this.internalStart()}onTransitionEnd=e=>{e.propertyName?.includes(`overflow`)&&e.target===this.rootElement&&this.checkOverflow()};setScroll(e){this.isHorizontal?this.options.wrapper.scrollTo({left:e,behavior:`instant`}):this.options.wrapper.scrollTo({top:e,behavior:`instant`})}onClick=e=>{let t=e.composedPath().filter(e=>e instanceof HTMLAnchorElement&&e.href).map(e=>new URL(e.href)),n=new URL(window.location.href);if(this.options.anchors){let e=t.find(e=>n.host===e.host&&n.pathname===e.pathname&&e.hash);if(e){let t=typeof this.options.anchors==`object`&&this.options.anchors?this.options.anchors:void 0,n=decodeURIComponent(e.hash);this.scrollTo(n,t);return}}if(this.options.stopInertiaOnNavigate&&t.some(e=>n.host===e.host&&n.pathname!==e.pathname)){this.reset();return}};onPointerDown=e=>{e.button===1&&this.reset()};isTouchOnSelectionHandle(e){let t=window.getSelection();if(!t||t.isCollapsed||t.rangeCount===0)return!1;let n=e.targetTouches[0]??e.changedTouches[0];if(!n)return!1;let r=t.getRangeAt(0).getClientRects();if(r.length===0)return!1;let i=r[0],a=r[r.length-1],o=Math.hypot(n.clientX-i.left,n.clientY-i.top)<=40,s=Math.hypot(n.clientX-a.right,n.clientY-a.bottom)<=40;return o||s}onVirtualScroll=e=>{if(typeof this.options.virtualScroll==`function`&&this.options.virtualScroll(e)===!1)return;let{deltaX:t,deltaY:n,event:r}=e;if(this.emitter.emit(`virtual-scroll`,{deltaX:t,deltaY:n,event:r}),r.ctrlKey||r.lenisStopPropagation)return;let i=r.type.includes(`touch`),a=r.type.includes(`wheel`);if(i&&this.isIos&&(r.type===`touchstart`&&(this._isDraggingSelection=this.isTouchOnSelectionHandle(r)),this._isDraggingSelection)){r.type===`touchend`&&(this._isDraggingSelection=!1);return}this.isTouching=r.type===`touchstart`||r.type===`touchmove`;let o=t===0&&n===0;if(this.options.syncTouch&&i&&r.type===`touchstart`&&o&&!this.isStopped&&!this.isLocked){this.reset();return}let s=this.options.gestureOrientation===`vertical`&&n===0||this.options.gestureOrientation===`horizontal`&&t===0;if(o||s)return;let c=r.composedPath();c=c.slice(0,c.indexOf(this.rootElement));let l=this.options.prevent,u=Math.abs(t)>=Math.abs(n)?`horizontal`:`vertical`;if(c.find(e=>e instanceof HTMLElement&&(typeof l==`function`&&l?.(e)||e.hasAttribute?.(`data-lenis-prevent`)||u===`vertical`&&e.hasAttribute?.(`data-lenis-prevent-vertical`)||u===`horizontal`&&e.hasAttribute?.(`data-lenis-prevent-horizontal`)||i&&e.hasAttribute?.(`data-lenis-prevent-touch`)||a&&e.hasAttribute?.(`data-lenis-prevent-wheel`)||this.options.allowNestedScroll&&this.hasNestedScroll(e,{deltaX:t,deltaY:n}))))return;if(this.isStopped||this.isLocked){r.cancelable&&r.preventDefault();return}if(!(this.options.syncTouch&&i||this.options.smoothWheel&&a)){this.isScrolling=`native`,this.animate.stop(),r.lenisStopPropagation=!0;return}let d=n;this.options.gestureOrientation===`both`?d=Math.abs(n)>Math.abs(t)?n:t:this.options.gestureOrientation===`horizontal`&&(d=t),(!this.options.overscroll||this.options.infinite||this.options.wrapper!==window&&this.limit>0&&(this.animatedScroll>0&&this.animatedScroll<this.limit||this.animatedScroll===0&&n>0||this.animatedScroll===this.limit&&n<0))&&(r.lenisStopPropagation=!0),r.cancelable&&r.preventDefault();let f=i&&this.options.syncTouch,p=i&&r.type===`touchend`;p&&(d=Math.sign(d)*Math.abs(this.velocity)**this.options.touchInertiaExponent),this.scrollTo(this.targetScroll+d,{programmatic:!1,...f?{lerp:p?this.options.syncTouchLerp:1}:{lerp:this.options.lerp,duration:this.options.duration,easing:this.options.easing}})};resize(){this.dimensions.resize(),this.animatedScroll=this.targetScroll=this.actualScroll,this.emit()}emit(){this.emitter.emit(`scroll`,this)}onNativeScroll=()=>{if(this._resetVelocityTimeout!==null&&(clearTimeout(this._resetVelocityTimeout),this._resetVelocityTimeout=null),this._preventNextNativeScrollEvent){this._preventNextNativeScrollEvent=!1;return}if(this.isScrolling===!1||this.isScrolling===`native`){let e=this.animatedScroll;this.animatedScroll=this.targetScroll=this.actualScroll,this.lastVelocity=this.velocity,this.velocity=this.animatedScroll-e,this.direction=Math.sign(this.animatedScroll-e),this.isStopped||(this.isScrolling=`native`),this.emit(),this.velocity!==0&&(this._resetVelocityTimeout=setTimeout(()=>{this.lastVelocity=this.velocity,this.velocity=0,this.isScrolling=!1,this.emit()},400))}};reset(){this.isLocked=!1,this.isScrolling=!1,this.animatedScroll=this.targetScroll=this.actualScroll,this.lastVelocity=this.velocity=0,this.animate.stop()}start(){if(this.isStopped){if(this.options.autoToggle){this.rootElement.style.removeProperty(`overflow`);return}this.internalStart()}}internalStart(){this.isStopped&&(this.reset(),this.isStopped=!1,this.emit())}stop(){if(!this.isStopped){if(this.options.autoToggle){this.rootElement.style.setProperty(`overflow`,`clip`);return}this.internalStop()}}internalStop(){this.isStopped||(this.reset(),this.isStopped=!0,this.emit())}raf=e=>{let t=e-(this.time||e);this.time=e,this.animate.advance(t*.001),this.options.autoRaf&&(this._rafId=requestAnimationFrame(this.raf))};scrollTo(e,{offset:n=0,immediate:r=!1,lock:i=!1,programmatic:a=!0,lerp:o=a?this.options.lerp:void 0,duration:s=a?this.options.duration:void 0,easing:c=a?this.options.easing:void 0,onStart:l,onComplete:u,force:d=!1,userData:p}={}){if(this.prefersReducedMotion&&(a?r=!0:(o=1,s=void 0,c=void 0)),(this.isStopped||this.isLocked)&&!d)return;let m=e,h=n;if(typeof m==`string`&&[`top`,`left`,`start`,`#`].includes(m))m=0;else if(typeof m==`string`&&[`bottom`,`right`,`end`].includes(m))m=this.limit;else{let e=null;if(typeof m==`string`?(e=m.startsWith(`#`)?document.getElementById(m.slice(1)):document.querySelector(m),e||(m===`#top`?m=0:console.warn(`Lenis: Target not found`,m))):m instanceof HTMLElement&&m?.nodeType&&(e=m),e){if(this.options.wrapper!==window){let e=this.rootElement.getBoundingClientRect();h-=this.isHorizontal?e.left:e.top}let t=e.getBoundingClientRect(),n=getComputedStyle(e),r=this.isHorizontal?Number.parseFloat(n.scrollMarginLeft):Number.parseFloat(n.scrollMarginTop),i=getComputedStyle(this.rootElement),a=this.isHorizontal?Number.parseFloat(i.scrollPaddingLeft):Number.parseFloat(i.scrollPaddingTop);m=(this.isHorizontal?t.left:t.top)+this.animatedScroll-(Number.isNaN(r)?0:r)-(Number.isNaN(a)?0:a)}}if(typeof m==`number`){if(m+=h,this.options.infinite){if(a){this.targetScroll=this.animatedScroll=this.scroll;let e=m-this.animatedScroll;e>this.limit/2?m-=this.limit:e<-this.limit/2&&(m+=this.limit)}}else m=t(0,m,this.limit);if(m===this.targetScroll){l?.(this),u?.(this);return}if(this.userData=p??{},r){this.animatedScroll=this.targetScroll=m,this.setScroll(this.scroll),this.reset(),this.preventNextNativeScrollEvent(),this.emit(),u?.(this),this.userData={},requestAnimationFrame(()=>{this.dispatchScrollendEvent()});return}a||(this.targetScroll=m),typeof s==`number`&&typeof c!=`function`?c=f:typeof c==`function`&&typeof s!=`number`&&(s=1),this.animate.fromTo(this.animatedScroll,m,{duration:s,easing:c,lerp:o,onStart:()=>{i&&(this.isLocked=!0),this.isScrolling=`smooth`,l?.(this)},onUpdate:(e,t)=>{this.isScrolling=`smooth`,this.lastVelocity=this.velocity,this.velocity=e-this.animatedScroll,this.direction=Math.sign(this.velocity),this.animatedScroll=e,this.setScroll(this.scroll),a&&(this.targetScroll=e),t||this.emit(),t&&(this.reset(),this.emit(),u?.(this),this.userData={},requestAnimationFrame(()=>{this.dispatchScrollendEvent()}),this.preventNextNativeScrollEvent())}})}}preventNextNativeScrollEvent(){this._preventNextNativeScrollEvent=!0,requestAnimationFrame(()=>{this._preventNextNativeScrollEvent=!1})}hasNestedScroll(e,{deltaX:t,deltaY:n}){let r=Date.now();e._lenis||={};let i=e._lenis,a,o,s,c,l,u,d,f,p,m;if(r-(i.time??0)>2e3){i.time=Date.now();let t=window.getComputedStyle(e);if(i.computedStyle=t,a=[`auto`,`overlay`,`scroll`].includes(t.overflowX),o=[`auto`,`overlay`,`scroll`].includes(t.overflowY),l=[`auto`].includes(t.overscrollBehaviorX),u=[`auto`].includes(t.overscrollBehaviorY),i.hasOverflowX=a,i.hasOverflowY=o,!(a||o))return!1;d=e.scrollWidth,f=e.scrollHeight,p=e.clientWidth,m=e.clientHeight,s=d>p,c=f>m,i.isScrollableX=s,i.isScrollableY=c,i.scrollWidth=d,i.scrollHeight=f,i.clientWidth=p,i.clientHeight=m,i.hasOverscrollBehaviorX=l,i.hasOverscrollBehaviorY=u}else s=i.isScrollableX,c=i.isScrollableY,a=i.hasOverflowX,o=i.hasOverflowY,d=i.scrollWidth,f=i.scrollHeight,p=i.clientWidth,m=i.clientHeight,l=i.hasOverscrollBehaviorX,u=i.hasOverscrollBehaviorY;if(!(a&&s||o&&c))return!1;let h=Math.abs(t)>=Math.abs(n)?`horizontal`:`vertical`,g,_,v,y,b,x;if(h===`horizontal`)g=Math.round(e.scrollLeft),_=d-p,v=t,y=a,b=s,x=l;else if(h===`vertical`)g=Math.round(e.scrollTop),_=f-m,v=n,y=o,b=c,x=u;else return!1;return!x&&(g>=_||g<=0)?!0:(v>0?g<_:g>0)&&y&&b}get rootElement(){return this.options.wrapper===window?document.documentElement:this.options.wrapper}get limit(){return this.options.naiveDimensions?this.isHorizontal?this.rootElement.scrollWidth-this.rootElement.clientWidth:this.rootElement.scrollHeight-this.rootElement.clientHeight:this.dimensions.limit[this.isHorizontal?`x`:`y`]}get isHorizontal(){return this.options.orientation===`horizontal`}get actualScroll(){let e=this.options.wrapper;return this.isHorizontal?e.scrollX??e.scrollLeft:e.scrollY??e.scrollTop}get scroll(){return this.options.infinite?i(this.animatedScroll,this.limit):this.animatedScroll}get progress(){return this.limit===0?1:this.scroll/this.limit}get isScrolling(){return this._isScrolling}set isScrolling(e){this._isScrolling!==e&&(this._isScrolling=e,this.updateClassName())}get isStopped(){return this._isStopped}set isStopped(e){this._isStopped!==e&&(this._isStopped=e,this.updateClassName())}get isLocked(){return this._isLocked}set isLocked(e){this._isLocked!==e&&(this._isLocked=e,this.updateClassName())}get isSmooth(){return this.isScrolling===`smooth`}get prefersReducedMotion(){return this.options.respectReducedMotion&&this.reducedMotionMediaQuery.matches}get className(){let e=`lenis`;return this.options.autoToggle&&(e+=` lenis-autoToggle`),this.isStopped&&(e+=` lenis-stopped`),this.isLocked&&(e+=` lenis-locked`),this.isScrolling&&(e+=` lenis-scrolling`),this.isScrolling===`smooth`&&(e+=` lenis-smooth`),e}updateClassName(){this.cleanUpClassName(),this.className.split(` `).forEach(e=>{this.rootElement.classList.add(e)})}cleanUpClassName(){for(let e of Array.from(this.rootElement.classList))(e===`lenis`||e.startsWith(`lenis-`))&&this.rootElement.classList.remove(e)}};globalThis.Lenis=p,globalThis.Lenis.prototype=p.prototype})();
+//# sourceMappingURL=lenis.min.js.map
+}
+</script>
 
 <script>
 (function () {
@@ -613,12 +666,7 @@ body{background:#08090A}
       var im = ph.querySelector('img');
       if (im) im.style.transitionDelay = d + 'ms';
     });
-    root.querySelectorAll('.is-st > div').forEach(function (el, n) {
-      el.classList.add('is-rev');
-      el.style.transitionDelay = (n * 110) + 'ms';
-    });
     if (reel) reel.classList.add('is-mrevp');
-    root.querySelectorAll('.is-st > div').forEach(function (e) { io.observe(e); });
   })();
 
   /* clip-path 로 완전히 가려진 요소는 IntersectionObserver 가 교차로 안 쳐준다
@@ -627,6 +675,24 @@ body{background:#08090A}
      부모는 목록에서 빼므로 비용은 곧 0 이 된다. */
   var mrevps = [].slice.call(root.querySelectorAll('.is-mrevp'));
 
+  /* ── 뒤쪽 절반 ──────────────────────────────────────────────────
+     깊이 스캔(2026-08-19) 결과 75% 지점부터 화면 안 변형 요소가 1개였다.
+     Lenis 공식 데모는 100% 까지 8개를 유지한다. VALUE·PROCESS 가 그냥
+     정적인 문서였다는 뜻이라 둘 다 스크롤 구동으로 바꾼다. */
+  var valSec  = root.querySelector('[data-val]');
+  var valWords = [];
+  var scrub = root.querySelector('[data-scrub]');
+  if (scrub) {
+    scrub.innerHTML = scrub.textContent.trim().split(/(\s+)/).map(function (w) {
+      return /^\s+$/.test(w) ? ' ' : (w ? '<i>' + w + '</i>' : '');
+    }).join('');
+    valWords = [].slice.call(scrub.querySelectorAll('i'));
+  }
+  var procSec  = root.querySelector('[data-proc]');
+  var procBar  = root.querySelector('[data-proc-bar]');
+  var procCard = [].slice.call(root.querySelectorAll('.is-st > div'));
+  var valLit = -1, procLit = -1;
+
   /* ── ①② 연속 rAF 루프 ────────────────────────────────────────
      이전에는 scroll 이벤트마다 1회 계산하고 CSS transition 으로 따라가게
      했다. 그러면 스크롤보다 항상 한 박자 늦는다. 여기서는 매 프레임
@@ -634,6 +700,17 @@ body{background:#08090A}
      다르게 주면 뒤 레이어가 늦게 따라오는 층이 생긴다.
      동시에 스크롤 "속도"를 재서 렌더링에 먹인다 — 빠르게 굴리면 사진이
      늘어나고 멈추면 탄성으로 돌아온다. 이게 위치만 보던 이전과의 차이다. */
+  /* ── 스무스 스크롤 ────────────────────────────────────────────
+     실측(2026-08-19): 이 페이지의 휠 계단응답 tau 는 25ms 였다. 즉 휠 한
+     칸이 그대로 순간이동한다(프레임당 340px). Lenis 공식 데모는 tau
+     217ms · 프레임당 26px 다. 그 차이가 "쫀득함"의 정체이고, 속도 반응
+     변형 같은 게 아니었다 — 저쪽엔 그런 게 아예 없다.
+     lerp 0.075 는 tau 217ms 를 역산한 값이다. */
+  var lenis = null;
+  if (!reduce && window.Lenis && !document.documentElement.classList.contains('lenis')) {
+    lenis = new window.Lenis({ lerp: 0.075, smoothWheel: true });
+  }
+
   var LERP = reduce ? 1 : 0.115;
   var lastSy = scrollY, vRaw = 0, vSm = 0;
   var parY = 0, trX = 0, trXPrev = 0;
@@ -650,10 +727,11 @@ body{background:#08090A}
     bgTop = bgEls.map(function (el) { return el.getBoundingClientRect().top + scrollY; });
   }
   measure();
-  addEventListener('resize', measure);
+  addEventListener('resize', function () { measure(); if (lenis) lenis.resize(); });
 
-  function frame() {
+  function frame(now) {
     requestAnimationFrame(frame);
+    if (lenis) lenis.raf(now || performance.now());
 
     for (var m = mrevps.length - 1; m >= 0; m--) {
       var mr = mrevps[m].getBoundingClientRect();
@@ -711,6 +789,34 @@ body{background:#08090A}
       }
     }
 
+    /* VALUE — 진행률이 단어를 밝힌다. 문장 끝을 구간 85% 에서 마치고
+       나머지는 다 읽을 여유로 남긴다. */
+    if (valSec && valWords.length) {
+      var vr = valSec.getBoundingClientRect();
+      var vspan = valSec.offsetHeight - innerHeight;
+      var vp = vspan > 0 ? Math.min(Math.max(-vr.top / vspan, 0), 1) : 0;
+      var lit = Math.round(Math.min(Math.max((vp - 0.08) / 0.77, 0), 1) * valWords.length);
+      // 문장은 20단어 남짓이라 바뀔 때 통째로 다시 칠해도 싸다
+      if (lit !== valLit) {
+        for (var w = 0; w < valWords.length; w++) valWords[w].classList.toggle('hot', w < lit);
+        valLit = lit;
+      }
+    }
+
+    /* PROCESS — 카드가 순서대로 켜지고 진행선이 따라간다 */
+    if (procSec && procCard.length) {
+      var pr = procSec.getBoundingClientRect();
+      var pspan = procSec.offsetHeight - innerHeight;
+      var pp = pspan > 0 ? Math.min(Math.max(-pr.top / pspan, 0), 1) : 0;
+      var pe = Math.min(Math.max((pp - 0.06) / 0.80, 0), 1);
+      if (procBar) procBar.style.width = (pe * 100) + '%';
+      var act = Math.min(procCard.length, Math.ceil(pe * procCard.length));
+      if (act !== procLit) {
+        for (var c = 0; c < procCard.length; c++) procCard[c].classList.toggle('hot', c < act);
+        procLit = act;
+      }
+    }
+
     if (reel && track) {
       var rr = reel.getBoundingClientRect();
       if (rr.bottom > -200 && rr.top < innerHeight + 200) {
@@ -722,9 +828,12 @@ body{background:#08090A}
       track.style.transform = 'translate3d(' + trX.toFixed(1) + 'px,0,0)';
 
       // 릴은 가로로 움직이므로 세로 속도가 아니라 릴 자신의 가로 속도로 민다
+      /* Lenis 를 붙이기 전 프레임당 스크롤은 340px 였고 이 계수는 거기
+         맞춰져 있었다. 실측 후 22~40px 대역이 됐으므로 그대로 두면 설계값의
+         1/8 만 걸려 사실상 안 보인다. 새 대역에 맞춰 다시 잡는다. */
       var tdx  = trX - trXPrev;
-      var skew = Math.max(-7, Math.min(7, tdx * 0.10));
-      var strx = 1 + Math.min(Math.abs(tdx) * 0.0055, 0.11);
+      var skew = Math.max(-4.5, Math.min(4.5, tdx * 0.85));
+      var strx = 1 + Math.min(Math.abs(tdx) * 0.045, 0.07);
 
       var cx = innerWidth / 2;
       for (var i = 0; i < reelFigs.length; i++) {
@@ -757,6 +866,7 @@ body{background:#08090A}
     if (!intro) return;
     var pct = document.getElementById('isPct'), bar = document.getElementById('isBar');
     root.classList.add('locked');
+    if (lenis) lenis.stop();
     requestAnimationFrame(function () { intro.classList.add('in'); });
     var imgs = [].slice.call(root.querySelectorAll('img'));
     var total = imgs.length || 1, done = 0, shown = 0;
@@ -773,6 +883,7 @@ body{background:#08090A}
       bar.style.width = '100%';
       intro.classList.add('gone');
       root.classList.remove('locked');
+      if (lenis) { lenis.start(); lenis.resize(); }
       measure();
       setTimeout(function () { intro.style.display = 'none'; }, 1000);
     }
@@ -827,3 +938,6 @@ body{background:#08090A}
   }
 })();
 </script>
+
+<!-- Vercel 코멘트 툴바 (프리뷰 배포에서만 동작) -->
+<script defer src="https://vercel.live/_next-live/feedback/feedback.js"></script>

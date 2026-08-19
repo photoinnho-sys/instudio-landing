@@ -179,7 +179,7 @@ body{background:#08090A}
 @keyframes is-run{to{transform:translateX(-50%)}}
 
 /* ── 카운터 (스크롤 구동) ──────────────────────── */
-.is-count{position:relative;height:300vh}
+.is-count{position:relative;height:150vh}
 .is-count__pin{position:sticky;top:0;height:100svh;display:flex;align-items:center;
   overflow:hidden}
 .is-flip{margin-top:22px;min-height:2.2em;display:flex;align-items:center}
@@ -210,8 +210,8 @@ body{background:#08090A}
 .is-ring svg{width:100%;height:100%;overflow:visible}
 .is-ring svg{filter:drop-shadow(0 0 26px rgba(255,46,147,.30))}
 .is-iris__barrel{fill:none;stroke:rgba(0,229,255,.30);stroke-width:1}
-.is-iris__blades{fill:rgba(255,46,147,.10);stroke:rgba(255,120,190,.55);stroke-width:.6}
-.is-iris__edge{stroke:rgba(0,229,255,.40);stroke-width:.6}
+.is-iris__blades{fill:rgba(255,46,147,.17);stroke:rgba(255,120,190,.62);stroke-width:.7}
+.is-iris__edge{stroke:rgba(0,229,255,.5);stroke-width:.7}
 @media(max-width:860px){.is-ring{display:none}}
 .is-bar{margin-top:34px;height:1px;background:var(--line);position:relative;max-width:520px}
 .is-bar span{position:absolute;inset:0 auto 0 0;width:0;
@@ -305,7 +305,7 @@ body{background:#08090A}
 @media (max-width:680px){
   .is-wrap{padding:0 18px}
   .is-reel{height:300vh}
-  .is-count{height:210vh}
+  .is-count{height:140vh}
   .is-val{height:150vh}
   .is-proc{height:170vh}
   .is-reel__tr{gap:10px;padding:0 18px}
@@ -384,12 +384,15 @@ body{background:#08090A}
    스크롤 컨테이너가 새로 생겨 핀이 뷰포트가 아니라 그 상자를 기준으로 잡는다.
    잘라내기는 핀 자신이 한다. */
 .is-end{min-height:210vh;padding:0}
-.is-end__pin{position:sticky;top:0;height:100svh;overflow:hidden;text-align:center}
+.is-end__pin{position:sticky;top:0;min-height:100svh;text-align:center}
 .is-end__stage{position:absolute;inset:0;z-index:1}
 /* 헤드라인과 폼은 각각 핀 전체를 덮는 레이어이고, 그 안에서 가운데 정렬된다.
    앞선 판은 스테이지 높이가 헤드라인 높이뿐이라 폼이 화면 위로 잘려 나갔다. */
 .is-end__hl,.is-end__form{position:absolute;inset:0;display:grid;place-items:center;
-  padding:0 24px}
+  padding:24px}
+/* 옮겨온 폼이 화면보다 크면 가운데 정렬이 위아래를 잘라낸다. 위에서부터
+   쌓고 여백으로 띄운다. */
+.is-end__form{align-content:start;padding-top:clamp(70px,9vh,110px)}
 /* 헤드라인과 폼이 같은 자리에 겹쳐 있다. 스크롤이 하나를 빨아들이고
    그 자리에서 다른 하나가 떠오른다. */
 .is-end__hl{will-change:transform,opacity,filter}
@@ -828,25 +831,35 @@ if (!window.Lenis) {
   var cFlip = root.querySelector('[data-flip]');
   var cIris  = root.querySelector('[data-iris] path');
   var cEdges = root.querySelector('[data-iris-edges]');
-  var IRIS_N = 8, IRIS_R = 43;
-  // 조리개: e=0 활짝 열림 → e=1 닫힘. 날개는 닫히며 회전한다.
+  var IRIS_N = 9, IRIS_R = 43;
+  /* 조리개 날개. 앞선 판은 경계선을 '반지름 방향'으로 그어서 수레바퀴처럼
+     보였다. 실제 조리개에서 보이는 선은 구멍 다각형의 '변을 밖으로 연장한
+     선'이다 — 그래서 나선으로 감긴다. e=0 활짝 → e=1 닫힘. */
   function drawIris(e) {
     if (!cIris) return;
-    var Rc  = 40 - 38.5 * e;                 // 구멍 반지름
-    var rot = e * 26 * Math.PI / 180;        // 날개 회전
-    var pts = [], edges = '';
+    var r = 40 - 37.2 * e;
+    var rot = -e * 46 * Math.PI / 180;
+    var V = [];
     for (var i = 0; i < IRIS_N; i++) {
       var a = rot + i * 2 * Math.PI / IRIS_N;
-      var x = 50 + Rc * Math.cos(a), y = 50 + Rc * Math.sin(a);
-      pts.push(x.toFixed(2) + ',' + y.toFixed(2));
-      edges += '<line x1="' + x.toFixed(2) + '" y1="' + y.toFixed(2) +
-               '" x2="' + (50 + IRIS_R * Math.cos(a)).toFixed(2) +
-               '" y2="' + (50 + IRIS_R * Math.sin(a)).toFixed(2) + '"/>';
+      V.push([50 + r * Math.cos(a), 50 + r * Math.sin(a)]);
     }
-    // 바깥 원 + 안쪽 다각형 → evenodd 로 그 사이(=날개)만 채운다
     var outer = 'M' + (50 - IRIS_R) + ',50 A' + IRIS_R + ',' + IRIS_R + ' 0 1,0 ' +
                 (50 + IRIS_R) + ',50 A' + IRIS_R + ',' + IRIS_R + ' 0 1,0 ' + (50 - IRIS_R) + ',50 Z';
-    cIris.setAttribute('d', outer + ' M' + pts.join(' L') + ' Z');
+    var inner = 'M' + V.map(function (p) { return p[0].toFixed(2) + ',' + p[1].toFixed(2); }).join(' L') + ' Z';
+    cIris.setAttribute('d', outer + ' ' + inner);   // evenodd → 그 사이가 날개
+
+    var edges = '';
+    for (var k = 0; k < IRIS_N; k++) {
+      var pv = V[k], q = V[(k + 1) % IRIS_N];
+      var dx = pv[0] - q[0], dy = pv[1] - q[1];
+      var L = Math.sqrt(dx * dx + dy * dy) || 1; dx /= L; dy /= L;
+      var ox = pv[0] - 50, oy = pv[1] - 50;
+      var bq = ox * dx + oy * dy;
+      var t = -bq + Math.sqrt(Math.max(bq * bq + IRIS_R * IRIS_R - (ox * ox + oy * oy), 0));
+      edges += '<line x1="' + pv[0].toFixed(2) + '" y1="' + pv[1].toFixed(2) +
+               '" x2="' + (pv[0] + t * dx).toFixed(2) + '" y2="' + (pv[1] + t * dy).toFixed(2) + '"/>';
+    }
     if (cEdges) cEdges.innerHTML = edges;
   }
   var BRANDS = [
@@ -873,28 +886,15 @@ if (!window.Lenis) {
     '양평칸트의마을','강릉장칼','논현우시야','왕십리왕초바베큐','깊은밤','고기홀릭김치본색','돈돈부르쓰','쎄쎄','LA갈비','새우장','계란빵','타코야끼','덮담',
     'BOOST','다이어메이커','론앤디마리','달그락키친','곱도리탕','대구홍대찜닭','수원낙곱새'
   ];
-  /* 카운터 곡선 — 세 마디.
-       0.04~0.36  0 → 88%   빠르게 붙는다
-       0.36~0.60  88% 유지  홀딩
-       0.60~0.94  88% → 100% 마지막을 밀어붙인다
-
-     마지막 마디에 1-(1-r)^3 을 쓰면 r=0 에서 기울기가 최대(3)라, 멈춰 있던
-     숫자가 정지 상태에서 최고속으로 튀어나간다 — 200번대 중반에서 이질감이
-     났던 게 이거다. smoothstep 은 양끝 기울기가 0 이라 멈춤에서 부드럽게
-     풀려나고 끝에서 다시 부드럽게 멎는다. */
-  function countCurve(p) {
-    if (p < 0.04) return 0;
-    if (p < 0.36) { var q = (p - 0.04) / 0.32; return 0.88 * (1 - Math.pow(1 - q, 2.2)); }
-    if (p < 0.60) return 0.88;
-    var r = Math.min((p - 0.60) / 0.34, 1);
-    return 0.88 + 0.12 * (r * r * (3 - 2 * r));
-  }
-
-  /* 홀딩 앞뒤에서 조리개 숨쉬기를 켜고 끄는 창. 경계에서 그냥 켜면 진폭만큼
-     한 번에 튄다. */
-  function breathWin(p) {
-    if (p <= 0.36 || p >= 0.60) return 0;
-    return Math.max(0, Math.min((p - 0.36) / 0.05, (0.60 - p) / 0.05, 1));
+  /* 카운터 — 스크롤로 몰던 것을 자동 재생으로 바꿨다. 구간을 길게 잡고
+     스크롤 위치에 매달아 두니 굴리는 속도에 따라 숫자가 튀어 어색했다.
+     이제 구간에 도달하면 2.6초 동안 0 → 270 을 스스로 보여주고, 그 동안
+     스크롤을 잠갔다가 끝나면 푼다. 3.2초 안전장치로 무슨 일이 있어도 풀린다. */
+  var cPlayed = false, cRun = false, cT0 = 0, cRel = null;
+  function countRelease() {
+    cRun = false;
+    if (cRel) { clearTimeout(cRel); cRel = null; }
+    if (lenis) lenis.start();
   }
 
   var reelFigs = track ? [].slice.call(track.children) : [];
@@ -1074,20 +1074,24 @@ if (!window.Lenis) {
     if (cSec && cNum) {
       var cr = cSec.getBoundingClientRect();
       if (cr.bottom > -200 && cr.top < innerHeight + 200) {
-      var cspan = cSec.offsetHeight - innerHeight;
-      var cp = cspan > 0 ? Math.min(Math.max(-cr.top / cspan, 0), 1) : 0;
-      var e = countCurve(cp);
+      var tnow = now || performance.now();
+      if (!cPlayed && cr.top <= 2 && cr.bottom > innerHeight * 0.5) {
+        cPlayed = true; cRun = true; cT0 = tnow;
+        if (lenis && !reduce) { lenis.stop(); cRel = setTimeout(countRelease, 3200); }
+      }
+      var e;
+      if (cRun) {
+        var tt = Math.min((tnow - cT0) / 2600, 1);
+        e = tt * tt * (3 - 2 * tt);                 // 부드럽게 출발·정지
+        if (tt >= 1) countRelease();
+      } else {
+        e = cPlayed ? 1 : 0;
+      }
       cNum.textContent = Math.max(1, Math.round(cTo * e));
       if (cBar) cBar.style.width = (e * 100) + '%';
-      // 홀딩 동안 조리개가 미세하게 숨을 쉰다. 진폭을 창으로 켜고 끈다.
-      drawIris(e + breathWin(cp) * 0.03 * Math.sin((now || 0) / 340));
+      drawIris(e);
       if (cFlip) {
-        // 브랜드명은 숫자와 따로 논다: 전 구간을 단조 선형으로 흐른다.
-        // 숫자가 멈춘 홀딩에도 이름은 계속 넘어가 화면이 죽지 않고, 시간이
-        // 아니라 스크롤에 매여 있어 멈추면 같이 멈춘다. 시간 구동이었을 때는
-        // 홀딩이 끝나는 순간 이름이 엉뚱한 곳으로 튀었다.
-        var np = Math.min(Math.max((cp - 0.04) / 0.90, 0), 1);
-        var bi = Math.min(BRANDS.length - 1, Math.floor(np * BRANDS.length));
+        var bi = Math.min(BRANDS.length - 1, Math.floor(e * BRANDS.length));
         if (cFlip.dataset.i !== String(bi)) { cFlip.dataset.i = bi; cFlip.textContent = BRANDS[bi]; }
       }
       }
@@ -1225,6 +1229,10 @@ if (!window.Lenis) {
       }
       var host = form.closest('._widget_data') || form;
       if (root.contains(host)) return;   // 이미 옮겼다
+      // 폼을 빼내면 그 자리에 Contact 정보만 남아 랜딩 끝에 군더더기가 된다.
+      // 원래 담고 있던 블록을 통째로 감춘다(우리 영역은 절대 건드리지 않는다).
+      var leftover = host.closest('.inside') || host.closest('section');
+      if (leftover && !leftover.contains(root)) leftover.style.display = 'none';
       // 호스트 DOM 을 건드리는 유일한 곳이다. 여기서 예외가 나도 페이지
       // 전체가 죽지 않게 가둔다 — 폼이 제자리에 남을 뿐이다.
       try {

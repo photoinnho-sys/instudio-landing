@@ -217,7 +217,16 @@ body{background:#08090A}
 .is-iris__barrel{fill:none;stroke:rgba(0,229,255,.30);stroke-width:1}
 .is-iris__blades{fill:rgba(255,46,147,.17);stroke:rgba(255,120,190,.62);stroke-width:.7}
 .is-iris__edge{stroke:rgba(0,229,255,.5);stroke-width:.7}
-@media(max-width:860px){.is-ring{display:none}}
+/* 폰에서 숨겼더니 숫자 옆이 텅 비었다. 흐름 안으로 내려 가운데에 둔다. */
+@media(max-width:860px){
+  /* 조리개는 .is-wrap 의 형제라, wrap 에 100svh 를 주면 그 아래로 밀려난다
+     (실측 top 2006px). 핀 자체를 세로 흐름으로 만들고 둘을 함께 가운데 둔다. */
+  .is-count__pin{display:flex;flex-direction:column;justify-content:center;
+    height:100svh;padding:0}
+  .is-count__pin .is-wrap{min-height:0;flex:0 0 auto}
+  .is-ring{position:relative;right:auto;top:auto;transform:none;
+    width:min(52vw,230px);margin:clamp(20px,5vw,34px) auto 0;opacity:.92;flex:0 0 auto}
+}
 .is-bar{margin-top:34px;height:1px;background:var(--line);position:relative;max-width:520px}
 .is-bar span{position:absolute;inset:0 auto 0 0;width:0;
   background:linear-gradient(90deg,var(--cy),var(--mg));
@@ -237,27 +246,30 @@ body{background:#08090A}
 /* ── 가로 릴 (핀 고정) ─────────────────────────── */
 .is-reel{position:relative;padding:clamp(70px,8vw,120px) 0}
 .is-reel__hd{display:flex;justify-content:space-between;align-items:baseline;
-  margin-bottom:clamp(24px,3vw,44px)}
-/* 세로 갤러리. 지인 피드백: 아래로 굴리던 중 가로 슬라이드가 나오니
-   옆으로 넘기려다 안 넘어가서 당황했다고 했다. 스크롤 방향과 콘텐츠
-   진행 방향을 일치시킨다. 핀과 매 프레임 3D 계산도 함께 사라져 가볍다. */
-.is-reel__g{display:grid;grid-template-columns:1fr 1fr;
-  gap:clamp(26px,3.4vw,60px) clamp(20px,2.6vw,44px)}
-.is-reel__g figure:nth-child(2n){margin-top:clamp(38px,7vw,124px)}
-.is-reel__ph{height:clamp(300px,46vh,560px);overflow:hidden;border-radius:var(--r-lg);
-  background:var(--el);
-  box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 70px -22px rgba(255,46,147,.55)}
-.is-reel img{width:100%;height:100%;object-fit:cover;transition:transform 900ms var(--ex)}
-.is-reel figure:hover .is-reel__ph>img{transform:scale(1.05)}
-.is-reel figcaption{margin-top:16px;text-align:center;
-  font-family:'JBM',ui-monospace,monospace;
-  font-size:clamp(13px,1.05vw,15px);letter-spacing:.1em;
-  color:var(--t1);text-transform:uppercase}
-@media(max-width:680px){
-  .is-reel__g{grid-template-columns:1fr;gap:34px}
-  .is-reel__g figure:nth-child(2n){margin-top:0}
-  .is-reel__ph{height:clamp(260px,52vh,420px)}
-}
+  margin-bottom:clamp(20px,2.4vw,34px)}
+/* 썸네일 격자. 한 장씩 크게 보여주니 이 구간이 페이지의 4분의 1을 먹었다.
+   촘촘히 모아 한 덩어리로 읽히게 하고, 자세히 보는 건 프로젝트 페이지에
+   맡긴다. 간격을 좁게 둬야 '모음'으로 읽히지 낱장으로 안 흩어진다. */
+.is-reel__g{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.is-reel figure{position:relative;overflow:hidden;border-radius:var(--r)}
+.is-reel__ph{aspect-ratio:1;height:auto;overflow:hidden;background:var(--el);
+  border-radius:var(--r)}
+.is-reel img{width:100%;height:100%;object-fit:cover;
+  transition:transform 700ms var(--ex),filter 400ms var(--eo);
+  filter:saturate(.92)}
+.is-reel figure:hover .is-reel__ph>img{transform:scale(1.07);filter:saturate(1.05)}
+/* 캡션은 격자를 어지럽히므로 올렸을 때만 띄운다 */
+.is-reel figcaption{position:absolute;left:0;right:0;bottom:0;padding:26px 10px 9px;
+  font-family:'JBM',ui-monospace,monospace;font-size:10px;letter-spacing:.09em;
+  color:var(--bone);text-transform:uppercase;text-align:center;
+  background:linear-gradient(180deg,transparent,rgba(6,6,12,.86));
+  opacity:0;transform:translateY(6px);
+  transition:opacity 260ms var(--eo),transform 260ms var(--eo)}
+.is-reel figure:hover figcaption{opacity:1;transform:none}
+@media(hover:none){.is-reel figcaption{opacity:1;transform:none}}
+@media(max-width:900px){.is-reel__g{grid-template-columns:repeat(4,1fr);gap:6px}}
+@media(max-width:680px){.is-reel__g{grid-template-columns:repeat(3,1fr);gap:5px}
+  .is-reel figcaption{font-size:8.5px;padding:18px 4px 6px;letter-spacing:.04em}}
 
 /* ── SERVICE (스티키) ──────────────────────────── */
 .is-svc{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
@@ -709,16 +721,16 @@ body.doz_sys{background:#06060C!important}
     </div>
     <!-- ✏️ 사진 10장. figcaption 은 브랜드명 -->
     <div class="is-reel__g" data-track>
-      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/d40420412f1a0.jpg" alt=""></div><figcaption>내동집</figcaption></figure>
-      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/b5b5a5a337805.jpg" alt=""></div><figcaption>로바타야키 토라</figcaption></figure>
-      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/a7c335f1000ce.jpg" alt=""></div><figcaption>피자스팟</figcaption></figure>
-      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/fc7fce5a5e98d.jpg" alt=""></div><figcaption>샐러드 마비에</figcaption></figure>
-      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/fe9ad2186a0a8.jpeg" alt=""></div><figcaption>지누스</figcaption></figure>
-      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/92189e3d29d28.jpg" alt=""></div><figcaption>구전국밥</figcaption></figure>
-      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/ae6ad68a237b3.jpg" alt=""></div><figcaption>더본코리아</figcaption></figure>
-      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/aa9b22cc64cf1.jpg" alt=""></div><figcaption>샐러드 마비에</figcaption></figure>
-      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/b8292aa85bf60.jpg" alt=""></div><figcaption>삼성 R&amp;D</figcaption></figure>
-      <figure><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/2b57924037618.jpg" alt=""></div><figcaption>롯데유통군</figcaption></figure>
+      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/d40420412f1a0.jpg" alt=""></div><figcaption>내동집</figcaption></a></figure>
+      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/b5b5a5a337805.jpg" alt=""></div><figcaption>로바타야키 토라</figcaption></a></figure>
+      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/a7c335f1000ce.jpg" alt=""></div><figcaption>피자스팟</figcaption></a></figure>
+      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/fc7fce5a5e98d.jpg" alt=""></div><figcaption>샐러드 마비에</figcaption></a></figure>
+      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/fe9ad2186a0a8.jpeg" alt=""></div><figcaption>지누스</figcaption></a></figure>
+      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/92189e3d29d28.jpg" alt=""></div><figcaption>구전국밥</figcaption></a></figure>
+      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/ae6ad68a237b3.jpg" alt=""></div><figcaption>더본코리아</figcaption></a></figure>
+      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/aa9b22cc64cf1.jpg" alt=""></div><figcaption>샐러드 마비에</figcaption></a></figure>
+      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/b8292aa85bf60.jpg" alt=""></div><figcaption>삼성 R&amp;D</figcaption></a></figure>
+      <figure><a href="/project"><div class="is-reel__ph"><img src="https://cdn.imweb.me/thumbnail/20260819/2b57924037618.jpg" alt=""></div><figcaption>롯데유통군</figcaption></a></figure>
     </div>
   </div>
 </section>
@@ -1318,6 +1330,22 @@ if (!window.Lenis) {
     }
     adopt();
   })();
+
+  /* 문의 버튼 — 같은 페이지 안에 폼이 있으면 그리로 부드럽게 내려보낸다.
+     기본 링크는 다른 페이지의 앵커라 페이지를 새로 여는데, 폼이 바로 이
+     페이지 끝에 있는 상황에서는 그게 어색하다. 폼이 없는 페이지에서는
+     원래 링크대로 동작한다. */
+  root.querySelectorAll('.is-hero .is-btn--f, .is-end__go').forEach(function (go) {
+    go.addEventListener('click', function (ev) {
+      var t = root.querySelector('.is-end__box--live') ||
+              root.querySelector('.is-end__form');
+      if (!t || t.getBoundingClientRect().height < 80) return;
+      ev.preventDefault();
+      var y = root.querySelector('[data-end]').getBoundingClientRect().top + scrollY;
+      if (lenis) lenis.scrollTo(y, { duration: 1.5 });
+      else scrollTo({ top: y, behavior: 'smooth' });
+    });
+  });
 
 
   /* 7. 로드 인트로 */

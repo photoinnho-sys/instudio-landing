@@ -278,9 +278,9 @@ body{background:#08090A}
   line-height:1.18;letter-spacing:-.025em;color:var(--bone);max-width:900px;margin-top:26px}
 
 /* ── PROCESS ──────────────────────────────────── */
-.is-st{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:40px;
+.is-st{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:40px;
   background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.is-st>div{background:var(--bg);padding:30px 24px 34px;transition:background var(--d1) var(--eo)}
+.is-st>div{background:var(--bg);padding:30px 20px 34px;transition:background var(--d1) var(--eo)}
 .is-st>div:hover{background:var(--el)}
 .is-st b{font-family:'JBM',ui-monospace,monospace;font-size:11px;
   color:var(--t4);letter-spacing:.1em;display:block}
@@ -297,7 +297,7 @@ body{background:#08090A}
 @media (max-width:1024px){
   .is-svc{grid-template-columns:1fr;gap:34px}
   .is-svc__l{position:relative;top:0;aspect-ratio:16/10}
-  .is-st{grid-template-columns:repeat(2,1fr)}
+  .is-st{grid-template-columns:repeat(3,1fr)}
 }
 @media (max-width:680px){
   .is-wrap{padding:0 18px}
@@ -380,7 +380,7 @@ body{background:#08090A}
 /* 섹션에 overflow:hidden 을 걸면 그 안의 position:sticky 가 죽는다 —
    스크롤 컨테이너가 새로 생겨 핀이 뷰포트가 아니라 그 상자를 기준으로 잡는다.
    잘라내기는 핀 자신이 한다. */
-.is-end{min-height:230vh;padding:0}
+.is-end{min-height:300vh;padding:0}
 .is-end__pin{position:sticky;top:0;height:100svh;overflow:hidden;text-align:center}
 .is-end__stage{position:absolute;inset:0;z-index:1}
 /* 헤드라인과 폼은 각각 핀 전체를 덮는 레이어이고, 그 안에서 가운데 정렬된다.
@@ -409,7 +409,7 @@ body{background:#08090A}
 .is-form__f{margin-top:14px}
 .is-form .is-btn{width:100%;margin-top:18px}
 @media(max-width:680px){.is-form__r{grid-template-columns:1fr}
-  .is-end{min-height:190vh}}
+  .is-end{min-height:240vh}}
 
 /* ── Lenis 스무스 스크롤 (dist/lenis.css 원문) ── */
 html.lenis,html.lenis body{height:auto}
@@ -613,13 +613,13 @@ html.lenis,html.lenis body{height:auto}
   <div class="is-proc__pin">
     <div class="is-bgw" data-bgw="9"><img alt=""></div>
   <div class="is-wrap">
-    <div class="is-lab">Process</div>
     <!-- ✏️ 리드타임 숫자 -->
     <div class="is-st">
       <div><b>01</b><h4>문의</h4><p>촬영 종류 · 시기 · 장소를 남겨주시면 당일 확인합니다.</p></div>
       <div><b>02</b><h4>견적</h4><p>영업일 1일 내 회신. 정기 협업 시 단가 조정이 가능합니다.</p></div>
       <div><b>03</b><h4>촬영</h4><p>일정 협의 후 진행. 전국 출장과 해외 촬영이 가능합니다.</p></div>
       <div><b>04</b><h4>납품</h4><p>보정 완료본을 촬영 후 5~7일 내 전달합니다.</p></div>
+      <div><b>05</b><h4>사후관리</h4><p>촬영 데이터를 최대 5년간 보관합니다. 납품 후에도 추가 수정이 가능합니다(별도 비용).</p></div>
     </div>
     <div class="is-prog"><span data-proc-bar></span></div>
   </div>
@@ -999,8 +999,9 @@ if (!window.Lenis) {
       var er = endSec.getBoundingClientRect();
       var espan = endSec.offsetHeight - innerHeight;
       var ep = espan > 0 ? Math.min(Math.max(-er.top / espan, 0), 1) : 0;
-      // 앞 22% 는 문장을 읽는 구간, 그 뒤 46% 에 걸쳐 빨려든다
-      var ez = Math.min(Math.max((ep - 0.22) / 0.46, 0), 1);
+      // 앞 40% 는 문장이 그대로 머문다(300vh 중 120vh — 읽고도 남는다).
+      // 그 뒤 28% 에 걸쳐 빨려들고, 0.68~0.70 은 아무것도 없는 한 박자다.
+      var ez = Math.min(Math.max((ep - 0.40) / 0.28, 0), 1);
       var eo = 1 - Math.pow(ez, 1.6);
       endHl.style.transform = 'translate3d(0,' + (-ez * 40).toFixed(1) + 'px,0) scale(' +
         (1 + ez * 2.6).toFixed(3) + ')';
@@ -1008,7 +1009,7 @@ if (!window.Lenis) {
       endHl.style.filter = 'blur(' + (ez * 16).toFixed(1) + 'px)';
       endHl.style.pointerEvents = ez > 0.5 ? 'none' : 'auto';
       if (endForm) {
-        var fz = Math.min(Math.max((ep - 0.44) / 0.30, 0), 1);
+        var fz = Math.min(Math.max((ep - 0.70) / 0.24, 0), 1);
         endForm.style.opacity = fz.toFixed(3);
         endForm.style.transform = 'translate3d(0,' + ((1 - fz) * 46).toFixed(1) +
           'px,0) scale(' + (0.9 + fz * 0.1).toFixed(3) + ')';

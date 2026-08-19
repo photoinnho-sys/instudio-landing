@@ -383,7 +383,7 @@ body{background:#08090A}
 /* 섹션에 overflow:hidden 을 걸면 그 안의 position:sticky 가 죽는다 —
    스크롤 컨테이너가 새로 생겨 핀이 뷰포트가 아니라 그 상자를 기준으로 잡는다.
    잘라내기는 핀 자신이 한다. */
-.is-end{min-height:300vh;padding:0}
+.is-end{min-height:210vh;padding:0}
 .is-end__pin{position:sticky;top:0;height:100svh;overflow:hidden;text-align:center}
 .is-end__stage{position:absolute;inset:0;z-index:1}
 /* 헤드라인과 폼은 각각 핀 전체를 덮는 레이어이고, 그 안에서 가운데 정렬된다.
@@ -411,9 +411,24 @@ body{background:#08090A}
   box-shadow:inset 0 0 0 1px var(--bone);background:var(--el)}
 .is-form__f{margin-top:14px}
 .is-end__box{width:100%;max-width:560px}
+/* 아임웹 문의 폼을 이 안으로 옮겼을 때 우리 카드 모양을 입힌다 */
+.is-end__box--live{background:rgba(8,9,10,.74);backdrop-filter:blur(14px);
+  padding:clamp(20px,2.6vw,30px);border-radius:var(--r-lg);
+  box-shadow:inset 0 0 0 1px var(--line),0 40px 90px rgba(0,0,0,.5);text-align:left}
+.is-end__box--live ._widget_data,
+.is-end__box--live .form-widget,
+.is-end__box--live .deadline-opacity{margin:0!important;padding:0!important;width:100%!important}
+.is-end__box--live input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]),
+.is-end__box--live textarea,.is-end__box--live select{
+  background:rgba(233,226,212,.05)!important;color:var(--t1)!important;
+  border:0!important;box-shadow:inset 0 0 0 1px var(--line)!important;
+  border-radius:var(--r)!important;font-family:'PreKR',-apple-system,sans-serif!important}
+.is-end__box--live button,.is-end__box--live [type=submit]{
+  background:linear-gradient(96deg,#FFC97A 0%,var(--mg) 46%,var(--bl) 100%)!important;
+  color:#160B04!important;border:0!important;border-radius:var(--r)!important;font-weight:700!important}
 .is-end__go{width:100%;margin-top:18px}
 @media(max-width:680px){.is-form__r{grid-template-columns:1fr}
-  .is-end{min-height:240vh}}
+  .is-end{min-height:180vh}}
 
 /* ── Lenis 스무스 스크롤 (dist/lenis.css 원문) ── */
 html.lenis,html.lenis body{height:auto}
@@ -443,6 +458,38 @@ html.lenis,html.lenis body{height:auto}
 .is .is-lab,.is .is-meta,.is .is-meta span,.is .is-reel figcaption,
 .is .is-st b,.is .is-svc__i span,.is .is-form label,.is .is-intro__n{
   font-family:'JBM',ui-monospace,Menlo,monospace!important}
+
+/* ── 아임웹 고정 헤더를 투명하게 ─────────────────────────────────
+   실측: #s...8d472c8a05b62._fixed_header_section, fixed, z:999, 높이 73px.
+   래퍼 자체는 투명이고 검은색은 자식이 칠한다. 자식까지 걷어낸 뒤 위쪽만
+   옅은 그라디언트로 덮어 흰 글자의 가독성을 지킨다. */
+._fixed_header_section,
+._fixed_header_section .inline-section-wrap,
+._fixed_header_section .section_inner,
+._fixed_header_section .inside,
+._fixed_header_section .doz_row,
+._fixed_header_section .col-dz,
+._fixed_header_section ._widget_data,
+._fixed_header_section > div{background:transparent!important;background-color:transparent!important}
+._fixed_header_section::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,6,12,.78) 0%,rgba(6,6,12,.34) 62%,rgba(6,6,12,0) 100%)}
+._fixed_header_section a,._fixed_header_section span{text-shadow:0 1px 14px rgba(0,0,0,.65)}
+
+/* ── 아임웹 문의 폼을 우리 톤으로 ────────────────────────────────
+   우리 섹션이 끝나고 폼이 나오는 지점에서 디자인이 갑자기 바뀌면 다른
+   사이트로 넘어간 것처럼 읽힌다. 입력칸과 버튼만 맞춰도 이어진다. */
+body.doz_sys{background:#06060C!important}
+._form-widget input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]),
+._form-widget textarea,._form-widget select{
+  background:rgba(233,226,212,.05)!important;color:#F4EFFA!important;
+  border:0!important;box-shadow:inset 0 0 0 1px rgba(233,226,212,.13)!important;
+  border-radius:4px!important;font-family:'PreKR',-apple-system,sans-serif!important}
+._form-widget input:focus,._form-widget textarea:focus,._form-widget select:focus{
+  box-shadow:inset 0 0 0 1px rgba(244,239,250,.8)!important;outline:0!important}
+._form-widget button,._form-widget [type=submit]{
+  background:linear-gradient(96deg,#FFC97A 0%,#FF2E93 46%,#6C4CFF 100%)!important;
+  color:#160B04!important;border:0!important;border-radius:4px!important;font-weight:700!important;
+  box-shadow:0 10px 34px -12px rgba(108,76,255,.7)!important}
 
 /* 호스트가 우리 안쪽 요소에 걸어둘 수 있는 것들을 되돌린다 */
 .is *{box-shadow:none}
@@ -911,7 +958,20 @@ if (!window.Lenis) {
     root.style.marginLeft  = (-r.left) + 'px';
     root.style.marginRight = (-(vw - r.right)) + 'px';
   }
+  /* 아임웹 고정 헤더(실측 73px)가 히어로를 아래로 밀어낸다. 우리가 페이지
+     맨 위에 있을 때만 그만큼 끌어올려 헤더가 사진 위에 뜨게 한다.
+     중간에 배치된 경우엔 손대지 않는다. */
+  function underHeader() {
+    root.style.marginTop = '';
+    if (!document.querySelector('._fixed_header_section')) return;
+    var top = root.getBoundingClientRect().top + scrollY;
+    if (top > 160) return;
+    root.style.marginTop = (-top) + 'px';
+  }
+
   fullBleed();
+  underHeader();
+
 
   /* 배경 사진 — 이미 내장된 릴 이미지를 그대로 재사용한다. 새로 받아오는
      바이트가 0 이고, 페이지 안에서 같은 사진이 다시 스쳐 지나가 결이 붙는다. */
@@ -960,10 +1020,13 @@ if (!window.Lenis) {
   });
   var bgTop = [];
   function measure() {
+    // 초기화 전에 불릴 수 있다(폼 이식 등). 여기서 예외가 나면 뒤따르는
+    // 인트로·커서까지 통째로 죽는다 — 실제로 그렇게 검은 화면이 났었다.
+    if (!bgEls) return;
     bgTop = bgEls.map(function (el) { return el.getBoundingClientRect().top + scrollY; });
   }
   measure();
-  addEventListener('resize', function () { fullBleed(); measure(); if (lenis) lenis.resize(); });
+  addEventListener('resize', function () { fullBleed(); underHeader(); measure(); if (lenis) lenis.resize(); });
 
   function frame(now) {
     requestAnimationFrame(frame);
@@ -1140,6 +1203,41 @@ if (!window.Lenis) {
   drawIris(0);
   requestAnimationFrame(frame);
 
+  /* ── 아임웹 문의 폼을 CTA 무대 안으로 옮긴다 ─────────────────────
+     데모에서는 헤드라인이 빨려든 자리에 폼이 떠올랐다. 아임웹에서는 그
+     폼이 우리 구간 '아래'에 따로 있어서 스크롤로 그냥 지나가 버렸다.
+     위젯 노드를 통째로 옮기므로 아임웹이 걸어둔 제출 핸들러는 그대로
+     살아 있다(복제가 아니라 이동이다). 옮겨진 뒤에는 우리 CTA 진행률이
+     투명도와 위치를 몰기 때문에 데모와 같은 동작이 된다.
+     Vercel·아티팩트에는 이 위젯이 없으므로 데모 폼이 그대로 쓰인다. */
+  (function () {
+    var box = root.querySelector('.is-end__box');
+    if (!box) return;
+    var tries = 0;
+    function adopt() {
+      var all = document.querySelectorAll('._form-widget'), form = null;
+      for (var i = 0; i < all.length; i++) {
+        if (all[i].getBoundingClientRect().height > 120) { form = all[i]; break; }
+      }
+      if (!form) {                       // 위젯이 아직 안 그려졌을 수 있다
+        if (++tries < 6) setTimeout(adopt, 500 * tries);
+        return;
+      }
+      var host = form.closest('._widget_data') || form;
+      if (root.contains(host)) return;   // 이미 옮겼다
+      // 호스트 DOM 을 건드리는 유일한 곳이다. 여기서 예외가 나도 페이지
+      // 전체가 죽지 않게 가둔다 — 폼이 제자리에 남을 뿐이다.
+      try {
+        box.classList.add('is-end__box--live');
+        box.insertBefore(host, box.firstChild);
+        var go = root.querySelector('.is-end__go');
+        if (go) go.style.display = 'none'; // 폼이 바로 있으니 버튼은 중복이다
+        fullBleed(); underHeader(); measure();
+      } catch (e) { box.classList.remove('is-end__box--live'); }
+    }
+    adopt();
+  })();
+
 
   /* 7. 로드 인트로 */
   (function () {
@@ -1166,6 +1264,7 @@ if (!window.Lenis) {
       root.classList.remove('locked');
       if (lenis) { lenis.start(); lenis.resize(); }
       fullBleed();
+      underHeader();
       measure();
       setTimeout(function () { intro.style.display = 'none'; }, 1000);
     }

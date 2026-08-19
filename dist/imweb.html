@@ -399,7 +399,7 @@ body{background:#08090A}
   padding:24px}
 /* 옮겨온 폼이 화면보다 크면 가운데 정렬이 위아래를 잘라낸다. 위에서부터
    쌓고 여백으로 띄운다. */
-.is-end__form{align-content:start;padding-top:clamp(70px,9vh,110px)}
+.is-end__form{align-content:start;padding-top:clamp(54px,7.5vh,100px)}
 /* 헤드라인과 폼이 같은 자리에 겹쳐 있다. 스크롤이 하나를 빨아들이고
    그 자리에서 다른 하나가 떠오른다. */
 /* filter 를 쓰지 않는다. 3.6배로 확대된 요소에 blur 를 걸면 레이어가
@@ -433,8 +433,8 @@ body{background:#08090A}
 .is-end__box--live .control-label{margin-bottom:9px!important;display:block;
   font-size:12.5px!important;letter-spacing:-.01em}
 .is-end__box--live input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]),
-.is-end__box--live select{min-height:44px!important;padding:0 14px!important}
-.is-end__box--live textarea{min-height:92px!important;padding:12px 14px!important;line-height:1.55}
+.is-end__box--live select{min-height:clamp(38px,4.6vh,44px)!important;padding:0 14px!important}
+.is-end__box--live textarea{min-height:clamp(74px,9vh,96px)!important;padding:12px 14px!important;line-height:1.55}
 .is-end__box--live .form-group:has(.checkbox) .checkbox{margin-bottom:6px!important}
 .is-end__box--live form .form-group{margin:0!important;width:auto!important}
 /* 두 칸을 다 쓰는 칸. 회사명·이메일은 값이 길고, 나머지는 폭이 필요하다.

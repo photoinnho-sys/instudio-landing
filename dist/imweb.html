@@ -428,7 +428,14 @@ body{background:#08090A}
    문의 내용은 폭이 필요하므로 두 칸을 다 쓴다. */
 .is-end__box--live{max-width:min(940px,100%)}
 .is-end__box--live form{display:grid;grid-template-columns:1fr 1fr;
-  gap:4px clamp(16px,2vw,26px);align-items:start}
+  gap:clamp(16px,2.1vh,24px) clamp(18px,2.2vw,30px);align-items:start}
+/* 라벨과 입력칸이 붙어 있었다. 한 칸씩 띄운다. */
+.is-end__box--live .control-label{margin-bottom:9px!important;display:block;
+  font-size:12.5px!important;letter-spacing:-.01em}
+.is-end__box--live input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]),
+.is-end__box--live select{min-height:44px!important;padding:0 14px!important}
+.is-end__box--live textarea{min-height:92px!important;padding:12px 14px!important;line-height:1.55}
+.is-end__box--live .form-group:has(.checkbox) .checkbox{margin-bottom:6px!important}
 .is-end__box--live form .form-group{margin:0!important;width:auto!important}
 /* 두 칸을 다 쓰는 칸. 회사명·이메일은 값이 길고, 나머지는 폭이 필요하다.
    이렇게 짝을 맞춰야 빈 칸이 생기지 않는다:

@@ -266,8 +266,10 @@ body{background:#08090A}
 
 /* ── 전체 클라이언트 목록 ──────────────────────── */
 .is-roster__g{margin-top:44px}
-.is-roster__g p{margin-top:14px;font-size:13.5px;line-height:2.0;color:var(--t2);
-  letter-spacing:-.005em;word-break:keep-all}
+.is-roster__g p{margin-top:14px;font-size:16.2px;line-height:1.85;color:var(--t2);
+  letter-spacing:-.005em;word-break:keep-all;
+  /* 나머지 줄을 양끝맞춤해 두면 마지막 줄이 조금 짧아도 어색하지 않다 */
+  text-align:justify}
 .is-roster__g:first-of-type p{color:var(--t1)}
 @media(max-width:680px){.is-roster__g p{font-size:12.5px;line-height:1.95}}
 
@@ -599,7 +601,6 @@ html.lenis,html.lenis body{height:auto}
   <div class="is-val__pin">
     <div class="is-bgw" data-bgw="4"><img alt=""></div>
     <div class="is-wrap">
-      <div class="is-lab">Value</div>
       <!-- ✏️ 기존 문구 그대로 -->
       <p data-scrub>아이엔 스튜디오는 기계처럼 찍어내는 공장식 촬영을 하지 않습니다.
         단 하나의 브랜드, 기업의 아이덴티티를 포착하여 브랜딩합니다.</p>

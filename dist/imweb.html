@@ -424,6 +424,43 @@ html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth iframe{pointer-events:none}
 .lenis.lenis-autoToggle{transition-property:overflow;transition-duration:1ms;
   transition-behavior:allow-discrete}
+/* ── 아임웹 호스트 대응 ─────────────────────────────────────────
+   실측(2026-08-19, /38): 히어로 h1 의 computed font-family 가
+   "montserrat, Pretendard, …" 였다. 아임웹의 전역 타이포 설정이 우리
+   규칙을 덮는다. 폰트는 로드돼 있고(document.fonts.check = true) 적용만
+   안 되는 상태였다. 우리 영역 안에서만 못 박는다.
+   순서 중요: 넓은 규칙 먼저, 좁은 규칙 나중. */
+.is,.is p,.is a,.is div,.is span,.is li,.is ul,.is form,
+.is h1,.is h2,.is h3,.is h4,.is b,.is i,.is em,.is strong,
+.is input,.is select,.is textarea,.is button{
+  font-family:'PreKR',-apple-system,sans-serif!important}
+
+.is .is-dis,.is .is-dis *,.is .is-num b,.is .is-st h4,.is .is-cbg span,
+.is .is-flip b,.is .is-val p,.is .is-val p *,.is .is-svc__i strong,
+.is .is-intro__w b,.is .is-mq--x span{
+  font-family:'Anton','PreEB',sans-serif!important}
+
+.is .is-lab,.is .is-meta,.is .is-meta span,.is .is-reel figcaption,
+.is .is-st b,.is .is-svc__i span,.is .is-form label,.is .is-intro__n{
+  font-family:'JBM',ui-monospace,Menlo,monospace!important}
+
+/* 호스트가 우리 안쪽 요소에 걸어둘 수 있는 것들을 되돌린다 */
+.is *{box-shadow:none}
+.is img{border-radius:0}
+.is .is-reel__ph,.is .is-svc__l,.is .is-form{border-radius:var(--r-lg)}
+.is .is-btn{border-radius:var(--r)}
+.is .is-reel__ph{box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 70px -22px rgba(255,46,147,.55)}
+.is .is-btn--f{box-shadow:0 10px 34px -12px rgba(108,76,255,.7)}
+.is .is-form{box-shadow:inset 0 0 0 1px var(--line),0 40px 90px rgba(0,0,0,.5)}
+.is .is-st>div.hot{box-shadow:inset 0 1px 0 rgba(255,46,147,.45),0 22px 50px -26px rgba(108,76,255,.6)}
+.is .is-btn--g{box-shadow:inset 0 0 0 1px var(--line)}
+.is .is-form input,.is .is-form select,.is .is-form textarea{box-shadow:inset 0 0 0 1px var(--line)}
+.is .is-form input:focus,.is .is-form select:focus,.is .is-form textarea:focus{box-shadow:inset 0 0 0 1px var(--bone)}
+.is .is-btn--f:hover{box-shadow:0 14px 42px -12px rgba(108,76,255,.85)}
+.is .is-cur2{box-shadow:inset 0 0 0 1px rgba(233,226,212,.5)}
+.is .is-bar span{box-shadow:0 0 18px rgba(255,46,147,.55)}
+.is .is-prog span{box-shadow:0 0 18px rgba(255,46,147,.5)}
+
 @media (prefers-reduced-motion:reduce){
   .is-rev,.is-word>i{transition:none!important;opacity:1!important;transform:none!important}
   .is-mrev{clip-path:none!important}
@@ -860,6 +897,22 @@ if (!window.Lenis) {
   var valLit = -1, procLit = -1;
   var aura = [].slice.call(root.querySelectorAll('.is-aura i'));
 
+  /* ── 풀블리드 ────────────────────────────────────────────────────
+     아임웹 코드 위젯은 본문 폭(실측 1264px)에 갇힌다. 화면이 1440 이면
+     양쪽 88px 이 잘려 히어로가 상자 안에 든다. 조상 체인을 확인하니
+     overflow-x 가 전부 visible 이고 body 만 hidden 이라 밖으로 뺄 수 있다.
+     폭은 CSS 로 못 정한다 — 위젯 폭이 테마·화면마다 달라서 런타임에 잰다.
+     100vw 를 쓰지 않는 이유: 스크롤바 폭이 포함돼 가로 스크롤이 생긴다. */
+  function fullBleed() {
+    root.style.marginLeft = root.style.marginRight = '';
+    var r = root.getBoundingClientRect();
+    var vw = document.documentElement.clientWidth;      // 스크롤바 제외
+    if (r.width >= vw - 2) return;                      // 이미 꽉 차 있으면 둔다
+    root.style.marginLeft  = (-r.left) + 'px';
+    root.style.marginRight = (-(vw - r.right)) + 'px';
+  }
+  fullBleed();
+
   /* 배경 사진 — 이미 내장된 릴 이미지를 그대로 재사용한다. 새로 받아오는
      바이트가 0 이고, 페이지 안에서 같은 사진이 다시 스쳐 지나가 결이 붙는다. */
   var bgws = [].slice.call(root.querySelectorAll('[data-bgw]')).map(function (w) {
@@ -910,7 +963,7 @@ if (!window.Lenis) {
     bgTop = bgEls.map(function (el) { return el.getBoundingClientRect().top + scrollY; });
   }
   measure();
-  addEventListener('resize', function () { measure(); if (lenis) lenis.resize(); });
+  addEventListener('resize', function () { fullBleed(); measure(); if (lenis) lenis.resize(); });
 
   function frame(now) {
     requestAnimationFrame(frame);
@@ -1112,6 +1165,7 @@ if (!window.Lenis) {
       intro.classList.add('gone');
       root.classList.remove('locked');
       if (lenis) { lenis.start(); lenis.resize(); }
+      fullBleed();
       measure();
       setTimeout(function () { intro.style.display = 'none'; }, 1000);
     }

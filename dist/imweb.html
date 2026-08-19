@@ -103,7 +103,10 @@ body{background:#08090A}
 .is-meta{position:absolute;left:0;right:0;bottom:0;z-index:1;display:flex;gap:0;
   border-top:1px solid var(--line);font-family:'JBM',monospace;font-size:10px;
   letter-spacing:.14em;text-transform:uppercase;color:var(--t3)}
-.is-meta span{flex:1;padding:14px 0 16px;border-right:1px solid var(--line)}
+/* 각 칸 안에서 가운데. 자간 .14em 은 마지막 글자 뒤에도 붙어서 가운데
+   정렬을 그만큼 오른쪽으로 밀기 때문에 text-indent 로 되돌린다. */
+.is-meta span{flex:1;padding:14px 12px 16px;border-right:1px solid var(--line);
+  text-align:center;text-indent:.14em}
 .is-meta span:last-child{border-right:none}
 @media(max-width:680px){.is-meta span:nth-child(n+3){display:none}}
 

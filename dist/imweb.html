@@ -390,7 +390,7 @@ body{background:#08090A}
 /* 섹션에 overflow:hidden 을 걸면 그 안의 position:sticky 가 죽는다 —
    스크롤 컨테이너가 새로 생겨 핀이 뷰포트가 아니라 그 상자를 기준으로 잡는다.
    잘라내기는 핀 자신이 한다. */
-.is-end{min-height:210vh;padding:0}
+.is-end{min-height:175vh;padding:0}
 .is-end__pin{position:sticky;top:0;min-height:100svh;text-align:center}
 .is-end__stage{position:absolute;inset:0;z-index:1}
 /* 헤드라인과 폼은 각각 핀 전체를 덮는 레이어이고, 그 안에서 가운데 정렬된다.
@@ -457,7 +457,7 @@ body{background:#08090A}
   color:#160B04!important;border:0!important;border-radius:var(--r)!important;font-weight:700!important}
 .is-end__go{width:100%;margin-top:18px}
 @media(max-width:680px){.is-form__r{grid-template-columns:1fr}
-  .is-end{min-height:180vh}}
+  .is-end{min-height:160vh}}
 
 /* ── Lenis 스무스 스크롤 (dist/lenis.css 원문) ── */
 html.lenis,html.lenis body{height:auto}
@@ -1158,14 +1158,15 @@ if (!window.Lenis) {
       var ep = espan > 0 ? Math.min(Math.max(-er.top / espan, 0), 1) : 0;
       // 앞 40% 는 문장이 그대로 머문다(300vh 중 120vh — 읽고도 남는다).
       // 그 뒤 28% 에 걸쳐 빨려들고, 0.68~0.70 은 아무것도 없는 한 박자다.
-      var ez = Math.min(Math.max((ep - 0.40) / 0.28, 0), 1);
+      var ez = Math.min(Math.max((ep - 0.34) / 0.26, 0), 1);
       var eo = 1 - Math.pow(ez, 1.6);
       endHl.style.transform = 'translate3d(0,' + (-ez * 40).toFixed(1) + 'px,0) scale(' +
         (1 + ez * 1.15).toFixed(3) + ')';
       endHl.style.opacity = eo.toFixed(3);
       endHl.style.pointerEvents = ez > 0.5 ? 'none' : 'auto';
       if (endForm) {
-        var fz = Math.min(Math.max((ep - 0.70) / 0.24, 0), 1);
+        // 구간이 끝나기 전에 폼이 완전히 떠 있어야 마지막 프레임이 폼이 된다
+        var fz = Math.min(Math.max((ep - 0.62) / 0.26, 0), 1);
         endForm.style.opacity = fz.toFixed(3);
         endForm.style.transform = 'translate3d(0,' + ((1 - fz) * 46).toFixed(1) +
           'px,0) scale(' + (0.9 + fz * 0.1).toFixed(3) + ')';
@@ -1208,6 +1209,17 @@ if (!window.Lenis) {
   drawIris(0);
   requestAnimationFrame(frame);
 
+  /* 랜딩 뒤에 남는 아임웹 블록(빈 섹션·기본 푸터)을 감춘다. 마지막 화면이
+     문의 폼으로 끝나야 하는데 그 뒤로 계속 내려가면서 폼이 위로 잘렸다.
+     페이지의 마지막이 곧 핀의 마지막 프레임이 되도록 뒤를 잘라낸다. */
+  function trimTail() {
+    var sec = root.closest('.section_wrap') || root.closest('section');
+    if (!sec || !sec.parentElement) return;
+    var n = sec.nextElementSibling;
+    while (n) { n.style.display = 'none'; n = n.nextElementSibling; }
+    if (lenis) lenis.resize();
+  }
+
   /* ── 아임웹 문의 폼을 CTA 무대 안으로 옮긴다 ─────────────────────
      데모에서는 헤드라인이 빨려든 자리에 폼이 떠올랐다. 아임웹에서는 그
      폼이 우리 구간 '아래'에 따로 있어서 스크롤로 그냥 지나가 버렸다.
@@ -1234,6 +1246,7 @@ if (!window.Lenis) {
       // 원래 담고 있던 블록을 통째로 감춘다(우리 영역은 절대 건드리지 않는다).
       var leftover = host.closest('.inside') || host.closest('section');
       if (leftover && !leftover.contains(root)) leftover.style.display = 'none';
+      trimTail();
       // 호스트 DOM 을 건드리는 유일한 곳이다. 여기서 예외가 나도 페이지
       // 전체가 죽지 않게 가둔다 — 폼이 제자리에 남을 뿐이다.
       try {

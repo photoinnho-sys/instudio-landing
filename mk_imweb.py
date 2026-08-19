@@ -20,7 +20,23 @@ for data,url in rev.items():
     if data in s:
         s=s.replace(data,url); n+=1
 # 폰트는 내장 유지(외부 요청 0 = 더 빠름). 남은 data:image 가 있으면 경고
+
+# ── 아임웹에 들어가면 안 되는 것들을 여기서 걷어낸다 ──────────────
+# 1) Vercel 코멘트 툴바 — 데모 배포 전용
+s = re.sub(r'\n<!-- Vercel [^\n]*\n<script defer src="https://vercel\.live[^\n]*\n', '\n', s)
+# 2) 데모 문의 폼 — 실제 접수는 아임웹 폼 위젯이 한다. 두 벌이 있으면
+#    방문자가 전송되지 않는 쪽을 채우고 떠난다.
+i = s.find('<form class="is-form"')
+if i >= 0:
+    j = s.find('</form>', i)
+    assert j > 0, '데모 폼 끝을 못 찾았다'
+    s = s[:i] + '<!-- 데모 입력칸 제거됨: 실제 접수는 아임웹 문의 폼 위젯이 처리한다 -->' + s[j+len('</form>'):]
+strip = []
+if 'vercel.live' not in s: strip.append('Vercel 툴바')
+if '<form class="is-form"' not in s: strip.append('데모 폼')
+
 left=len(re.findall(r'data:image/', s))
 open('dist/imweb.html','w',encoding='utf-8').write(s)
+print("제거: " + (', '.join(strip) if strip else '없음'))
 print("이미지 %d종 → CDN 주소로 치환 · 남은 내장이미지 %d" % (n, left))
 print("아임웹용 파일 크기: %.0f KB" % (len(s)/1024))

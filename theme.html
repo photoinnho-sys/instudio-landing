@@ -57,10 +57,15 @@ body.doz_sys h1,body.doz_sys h2,body.doz_sys h3,body.doz_sys h4{
 ._fixed_header_section{z-index:9990!important}
 ._fixed_header_section::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
   background:linear-gradient(180deg,rgba(6,6,12,.78) 0%,rgba(6,6,12,.34) 62%,rgba(6,6,12,0) 100%)}
-/* 내비는 본문과 같은 서체를 쓴다(위 주석 참고). 대문자와 자간으로 성격을 낸다. */
-._fixed_header_section a{text-transform:uppercase;font-size:14.5px!important;
-  font-weight:600!important;letter-spacing:.04em!important;
-  text-shadow:0 1px 14px rgba(0,0,0,.65);transition:color .16s cubic-bezier(0,0,.2,1)}
+/* 내비 모양은 '._fixed_header_section a' 가 아니라 링크 자체(a._fade_link)에 건다.
+   실측: 아임웹이 헤더 컨테이너를 1.15초쯤에야 붙인다. 컨테이너를 기준으로 하면
+   그 순간 크기·굵기가 16px/400 → 14.5px/600 으로 점프한다. 그게 깜빡임의 정체다.
+   링크에는 처음부터 _fade_link 가 붙어 있으므로 첫 페인트부터 같은 모양이 된다.
+   (카테고리 알약은 .btn.btn-primary 규칙이 특이도로 이겨서 영향받지 않는다) */
+a._fade_link{font-size:15px!important;font-weight:600!important;
+  letter-spacing:.04em!important;text-transform:uppercase;
+  text-shadow:0 1px 14px rgba(0,0,0,.65);
+  transition:color .16s cubic-bezier(0,0,.2,1)}
 ._fixed_header_section a:hover{color:var(--is-cy)!important}
 
 /* 모바일 상단 버튼(All Project · About · Contact)은 검은 알약 배경을 달고

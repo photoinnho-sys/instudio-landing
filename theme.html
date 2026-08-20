@@ -132,3 +132,40 @@ body.doz_sys a{color:inherit}
 /* ── 선택 영역 ────────────────────────────────────────────────── */
 ::selection{background:var(--is-mg);color:#0A0A0A}
 </style>
+
+<script>
+/* ══ 메인 이전 대비 링크 보정 ═══════════════════════════════════════
+   실측(/38)에서 두 가지가 걸렸다. 홈이 바뀌면 둘 다 사람을 엉뚱한 데로
+   보낸다. 메뉴 설정을 일일이 고치는 대신 여기서 한 번에 잡는다. */
+(function () {
+  function fix() {
+    /* 1) 모바일 메뉴의 로고가 /1 을 가리킨다. /1 은 옛 메인의 번호 별칭이라
+          홈이 바뀌어도 계속 옛 페이지로 데려간다. */
+    document.querySelectorAll('a[href="/1"], a[href="/1/"]').forEach(function (a) {
+      a.setAttribute('href', '/');
+    });
+
+    /* 2) 헤더의 Contact 는 홈의 특정 섹션 앵커(#s2025…)를 가리킨다. 그 앵커는
+          옛 메인에만 있으므로 새 홈에서는 아무 데도 못 간다. 지금 페이지에
+          문의 폼이 있으면 그리로 부드럽게 내려보내고, 없으면 원래대로 둔다. */
+    document.querySelectorAll('a[href*="#s2025"]').forEach(function (a) {
+      if (a.dataset.isFix) return;
+      a.dataset.isFix = '1';
+      a.addEventListener('click', function (ev) {
+        var t = null, all = document.querySelectorAll('._form-widget');
+        for (var i = 0; i < all.length; i++) {
+          if (all[i].getBoundingClientRect().height > 120) { t = all[i]; break; }
+        }
+        if (!t) return;                       // 폼이 없는 페이지 → 원래 링크대로
+        ev.preventDefault();
+        var y = t.getBoundingClientRect().top + scrollY - 90;
+        if (window.lenis && window.lenis.scrollTo) window.lenis.scrollTo(y, { duration: 1.2 });
+        else scrollTo({ top: y, behavior: 'smooth' });
+      });
+    });
+  }
+  fix();
+  // 아임웹이 헤더를 늦게 그리는 경우가 있어 몇 번 더 확인한다
+  var n = 0, t = setInterval(function () { fix(); if (++n > 6) clearInterval(t); }, 600);
+})();
+</script>

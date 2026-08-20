@@ -421,7 +421,11 @@ body{background:#08090A}
 /* 섹션에 overflow:hidden 을 걸면 그 안의 position:sticky 가 죽는다 —
    스크롤 컨테이너가 새로 생겨 핀이 뷰포트가 아니라 그 상자를 기준으로 잡는다.
    잘라내기는 핀 자신이 한다. */
-.is-end{min-height:175vh;padding:0}
+/* overflow:hidden 은 안의 position:sticky 를 죽인다(핀이 뷰포트가 아니라 이
+   상자를 기준으로 잡는다). overflow-x:clip 은 스크롤 컨테이너를 만들지 않아
+   sticky 를 살린 채로 가로 넘침만 잘라낸다 — 헤드라인이 2.15배로 커질 때
+   화면 밖으로 삐져나가 가로 스크롤이 생기던 것을 막는다. */
+.is-end{min-height:175vh;padding:0;overflow-x:clip}
 .is-end__pin{position:sticky;top:0;min-height:100svh;text-align:center}
 .is-end__stage{position:absolute;inset:0;z-index:1}
 /* 헤드라인과 폼은 각각 핀 전체를 덮는 레이어이고, 그 안에서 가운데 정렬된다.
@@ -458,7 +462,11 @@ body{background:#08090A}
    두 열로 접어 높이를 반으로 줄이고 상자를 넓힌다. 체크박스 묶음과
    문의 내용은 폭이 필요하므로 두 칸을 다 쓴다. */
 .is-end__box--live{max-width:min(940px,100%)}
-.is-end__box--live form{display:grid;grid-template-columns:1fr 1fr;
+.is-end__box--live form{display:grid;
+  /* 1fr 의 기본 최소값은 min-content 다. 촬영 종류 체크박스 6개가 한 줄로
+     늘어나면 칸이 그만큼 벌어져 화면 밖으로 넘친다(실측 637px). minmax(0,1fr)
+     로 눌러야 줄어든다. */
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
   gap:clamp(16px,2.1vh,24px) clamp(18px,2.2vw,30px);align-items:start}
 /* 라벨과 입력칸이 붙어 있었다. 한 칸씩 띄운다. */
 .is-end__box--live .control-label{margin-bottom:9px!important;display:block;
@@ -467,6 +475,13 @@ body{background:#08090A}
 .is-end__box--live select{min-height:clamp(38px,4.6vh,44px)!important;padding:0 14px!important}
 .is-end__box--live textarea{min-height:clamp(74px,9vh,96px)!important;padding:12px 14px!important;line-height:1.55}
 .is-end__box--live .form-group:has(.checkbox) .checkbox{margin-bottom:6px!important}
+/* 연락처 세 칸 — 고정 폭(65px)이라 좁은 칸에서 줄바꿈된다. 폭을 나눠 갖게 한다. */
+.is-end__box--live .phonenumber_wrap{display:flex!important;align-items:center;
+  gap:7px;flex-wrap:nowrap!important;width:100%!important}
+.is-end__box--live .phonenumber_wrap input{flex:1 1 0!important;width:auto!important;
+  min-width:0!important;padding:0 8px!important;text-align:center}
+.is-end__box--live .phonenumber_wrap > span{flex:0 0 auto;margin:0!important;
+  color:var(--t3);line-height:1}
 .is-end__box--live form .form-group{margin:0!important;width:auto!important}
 /* 두 칸을 다 쓰는 칸. 회사명·이메일은 값이 길고, 나머지는 폭이 필요하다.
    이렇게 짝을 맞춰야 빈 칸이 생기지 않는다:
@@ -475,8 +490,9 @@ body{background:#08090A}
 .is-end__box--live form .form-group:has(.form-select-wrap),
 .is-end__box--live form .form-group:has(.checkbox),
 .is-end__box--live form .form-group:has(textarea){grid-column:1/-1}
-.is-end__box--live form .form-group:has(.checkbox) .checkbox{
-  display:inline-flex!important;width:auto!important;margin:0 18px 0 0!important}
+.is-end__box--live form .form-group:has(.checkbox){min-width:0}
+.is-end__box--live form .form-group:has(.checkbox) > *:not(label){
+  display:inline-flex!important;width:auto!important;margin:0 16px 6px 0!important}
 .is-end__box--live .deadline-opacity{width:100%!important}
 .is-end__box--live .form.text-center{margin-top:18px}
 .is-end__box--live .btn-primary{display:block;width:100%;padding:14px 0!important;
@@ -510,6 +526,9 @@ body{background:#08090A}
   .is-end__hl{margin:clamp(60px,14vw,110px) 0 clamp(30px,7vw,54px)}
   .is-end__box{margin:0 auto}
   .is-end__box--live{padding:18px}
+  /* 폰에서 2열이면 칸 하나가 165px 밖에 안 된다. 연락처는 65px 입력 3개와
+     구분자가 들어가 217px 이 필요해 마지막 칸이 아래로 밀렸다. 1열로 편다. */
+  .is-end__box--live form{grid-template-columns:minmax(0,1fr)!important}
   .is-count{height:110vh}}
 
 /* ── Lenis 스무스 스크롤 (dist/lenis.css 원문) ── */

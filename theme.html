@@ -148,7 +148,10 @@ body.doz_sys a{color:inherit}
    기본은 한 줄에 한 칸씩 쌓여 필드가 1264px 로 늘어진다. 두 열로 접고
    가운데로 모은다. 랜딩 안(.is)의 폼은 이미 자기 규칙이 있으므로 제외. */
 ._form-widget form{max-width:860px;margin-inline:auto;
-  display:grid;grid-template-columns:1fr 1fr;gap:16px 26px;align-items:start}
+  display:grid;gap:16px 26px;align-items:start;
+  /* 1fr 의 최소값은 min-content 라 체크박스 6개가 칸을 밀어낸다 → 화면 넘침 */
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+._form-widget form .form-group{min-width:0}
 ._form-widget form > *{margin:0!important}
 /* form 바로 아래에 클래스 없는 빈 div 가 있어 격자 한 칸을 먹는다.
    그대로 두면 첫 칸(회사명)이 오른쪽 열에서 시작한다. */
@@ -158,9 +161,16 @@ body.doz_sys a{color:inherit}
 ._form-widget form .form-group:has(.checkbox),
 ._form-widget form .form-group:has(textarea),
 ._form-widget form .form-group:has(.form-select-wrap){grid-column:1/-1}
-._form-widget form .form-group:has(.checkbox) .checkbox{
-  display:inline-flex!important;width:auto!important;margin:0 20px 6px 0!important}
+._form-widget form .form-group:has(.checkbox) > *:not(label){
+  display:inline-flex!important;width:auto!important;margin:0 18px 6px 0!important}
 ._form-widget .form.text-center{max-width:860px;margin:20px auto 0}
+/* 연락처 세 칸이 고정 폭(65px)이라 좁은 칸에서 줄바꿈된다 */
+._form-widget .phonenumber_wrap{display:flex!important;align-items:center;
+  gap:7px;flex-wrap:nowrap!important;width:100%!important}
+._form-widget .phonenumber_wrap input{flex:1 1 0!important;width:auto!important;
+  min-width:0!important;padding:0 8px!important;text-align:center}
+._form-widget .phonenumber_wrap > span{flex:0 0 auto;margin:0!important;line-height:1}
+@media(max-width:680px){._form-widget form{grid-template-columns:minmax(0,1fr)!important}}
 ._form-widget .btn-primary{display:block;width:100%;
   padding:15px 0!important;line-height:1!important;height:auto!important}
 /* 랜딩 안의 폼은 자기 규칙을 쓴다 */
@@ -181,12 +191,14 @@ body.doz_sys a{color:inherit}
           홈을 아직 안 바꿨으므로 '/' 는 옛 메인이고, '/1' 은 그 번호 별칭이다.
           로고를 누르면 옛 사이트로 떨어진다. 홈을 바꾼 뒤에도 /38 은 그대로
           랜딩을 가리키므로 이 값을 유지해도 문제없다. */
-    var HOME = '/38';
+    /* 홈을 랜딩으로 바꾼 뒤라 '/' 가 곧 랜딩이다. 같은 페이지가 두 주소로
+       존재하면 검색엔진이 중복으로 보므로 로고는 '/' 하나만 가리킨다. */
+    var HOME = '/';
     document.querySelectorAll('a').forEach(function (a) {
       var t = (a.textContent || '').trim();
       var h = a.getAttribute('href');
       if (t !== 'IN STUDIO') return;
-      if (h === '/' || h === '/1' || h === '/1/' || h === null) a.setAttribute('href', HOME);
+      if (h === '/1' || h === '/1/' || h === '/38' || h === null) a.setAttribute('href', HOME);
     });
     document.querySelectorAll('a[href="/1"], a[href="/1/"]').forEach(function (a) {
       a.setAttribute('href', HOME);

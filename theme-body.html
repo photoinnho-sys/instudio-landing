@@ -4,10 +4,19 @@
    보낸다. 메뉴 설정을 일일이 고치는 대신 여기서 한 번에 잡는다. */
 (function () {
   function fix() {
-    /* 1) 모바일 메뉴의 로고가 /1 을 가리킨다. /1 은 옛 메인의 번호 별칭이라
-          홈이 바뀌어도 계속 옛 페이지로 데려간다. */
+    /* 1) 로고를 랜딩으로 보낸다.
+          홈을 아직 안 바꿨으므로 '/' 는 옛 메인이고, '/1' 은 그 번호 별칭이다.
+          로고를 누르면 옛 사이트로 떨어진다. 홈을 바꾼 뒤에도 /38 은 그대로
+          랜딩을 가리키므로 이 값을 유지해도 문제없다. */
+    var HOME = '/38';
+    document.querySelectorAll('a').forEach(function (a) {
+      var t = (a.textContent || '').trim();
+      var h = a.getAttribute('href');
+      if (t !== 'IN STUDIO') return;
+      if (h === '/' || h === '/1' || h === '/1/' || h === null) a.setAttribute('href', HOME);
+    });
     document.querySelectorAll('a[href="/1"], a[href="/1/"]').forEach(function (a) {
-      a.setAttribute('href', '/');
+      a.setAttribute('href', HOME);
     });
 
     /* 2) 헤더의 Contact 는 홈의 특정 섹션 앵커(#s2025…)를 가리킨다. 그 앵커는

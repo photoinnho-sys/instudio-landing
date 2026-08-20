@@ -36,8 +36,8 @@ body.doz_sys,body.doz_sys p,body.doz_sys span,body.doz_sys div,body.doz_sys li,
 body.doz_sys td,body.doz_sys input,body.doz_sys textarea,body.doz_sys select,
 body.doz_sys button{font-family:'PreKR',-apple-system,sans-serif!important;
   letter-spacing:-.012em}
-body.doz_sys h1,body.doz_sys h2,body.doz_sys h3,body.doz_sys h4,
-._fixed_header_section a{font-family:'Anton','PreKR',sans-serif!important;
+body.doz_sys h1,body.doz_sys h2,body.doz_sys h3,body.doz_sys h4{
+  font-family:'Anton','PreKR',sans-serif!important;
   letter-spacing:-.03em;font-weight:400!important}
 
 /* ── 헤더 : 랜딩과 동일하게 투명 + 상단 스크림 ──────────────────── */
@@ -57,7 +57,9 @@ body.doz_sys h1,body.doz_sys h2,body.doz_sys h3,body.doz_sys h4,
 ._fixed_header_section{z-index:9990!important}
 ._fixed_header_section::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
   background:linear-gradient(180deg,rgba(6,6,12,.78) 0%,rgba(6,6,12,.34) 62%,rgba(6,6,12,0) 100%)}
-._fixed_header_section a{text-transform:uppercase;font-size:15px!important;
+/* 내비는 본문과 같은 서체를 쓴다(위 주석 참고). 대문자와 자간으로 성격을 낸다. */
+._fixed_header_section a{text-transform:uppercase;font-size:14.5px!important;
+  font-weight:600!important;letter-spacing:.04em!important;
   text-shadow:0 1px 14px rgba(0,0,0,.65);transition:color .16s cubic-bezier(0,0,.2,1)}
 ._fixed_header_section a:hover{color:var(--is-cy)!important}
 

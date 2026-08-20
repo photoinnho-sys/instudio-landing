@@ -1,0 +1,222 @@
+<!-- ============================================================
+  아임웹 코드 위젯용 스니펫 (크림 배지형)
+  디자인모드 > 위젯추가(+) > 코드 위젯 > 코드 위젯 설정 > 이 파일 전체를 그대로 붙여넣기
+  ※ <!DOCTYPE>, <html>, <head>, <body> 태그는 없어도 됩니다. 이 코드 자체가 위젯 내용입니다.
+============================================================ -->
+<div class="ip-card">
+  <style>
+    .ip-card{
+      --bg:#ECE8DE;
+      --ink:#242019;
+      --ink-soft:#4A453C;
+      --line:#C9C3B4;
+      --muted:#8B8577;
+      position:relative;
+      display:flex;
+      justify-content:center;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+      padding:48px 18px 64px;
+      overflow:hidden;
+      box-sizing:border-box;
+    }
+    .ip-card *{ box-sizing:border-box; }
+    .ip-card ul{ list-style:none; margin:0; padding:0; }
+
+    .ip-card .grain{
+      position:absolute; inset:0; pointer-events:none;
+      opacity:.05; mix-blend-mode:multiply; z-index:0;
+    }
+    .ip-card .card{ position:relative; z-index:1; width:100%; max-width:420px; }
+    .ip-card .card > *{ opacity:0; animation:ipFadeUp .6s ease forwards; }
+    .ip-card .card > *:nth-child(1){animation-delay:.02s}
+    .ip-card .card > *:nth-child(2){animation-delay:.10s}
+    .ip-card .card > *:nth-child(3){animation-delay:.18s}
+    .ip-card .card > *:nth-child(4){animation-delay:.24s}
+    .ip-card .card > *:nth-child(5){animation-delay:.30s}
+    .ip-card .card > *:nth-child(6){animation-delay:.36s}
+    .ip-card .card > *:nth-child(7){animation-delay:.42s}
+    .ip-card .card > *:nth-child(8){animation-delay:.48s}
+    .ip-card .card > *:nth-child(9){animation-delay:.54s}
+    .ip-card .card > *:nth-child(10){animation-delay:.60s}
+    @keyframes ipFadeUp{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+
+    .ip-card .top-row{
+      display:flex; justify-content:space-between; align-items:center;
+      font-size:11px; letter-spacing:.12em; font-weight:700;
+      color:var(--ink-soft); margin-bottom:26px;
+    }
+    .ip-card .aperture{ width:20px; height:20px; color:var(--ink-soft); animation:ipSpin 16s linear infinite; }
+    @keyframes ipSpin{ to{ transform:rotate(360deg); } }
+
+    .ip-card .badge-wrap{ display:flex; justify-content:center; margin-bottom:24px; }
+    .ip-card .badge{ width:112px; height:112px; color:var(--ink); }
+    .ip-card .brand-name{
+      text-align:center; font-size:12px; font-weight:800; letter-spacing:.3em;
+      color:var(--ink-soft); margin-bottom:30px;
+    }
+    .ip-card .sprocket{ width:100%; height:12px; display:block; color:var(--line); margin:22px 0; }
+
+    .ip-card .name-block{ margin-bottom:6px; }
+    .ip-card .name-ko{ font-size:15px; font-weight:800; display:inline-block; margin-right:10px; }
+    .ip-card .role{ font-size:14px; color:var(--ink-soft); }
+    .ip-card .name-en{ font-size:40px; font-weight:900; line-height:1.02; letter-spacing:-.01em; margin:10px 0 20px; }
+
+    .ip-card .contact-list{ display:flex; flex-direction:column; gap:10px; }
+    .ip-card .contact-list a{
+      display:flex; align-items:center; gap:10px; color:var(--ink); text-decoration:none;
+      font-size:15px; font-weight:600; padding:4px 0;
+    }
+    .ip-card .contact-list svg{ flex:none; opacity:.75; }
+
+    .ip-card .actions{ display:flex; flex-direction:column; gap:10px; margin-top:28px; }
+    .ip-card .btn{
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      width:100%; padding:15px 18px; border-radius:2px; font-size:14px; font-weight:800;
+      letter-spacing:.02em; text-decoration:none; border:1.5px solid var(--ink);
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+      transition:opacity .15s ease, transform .15s ease; background:none;
+    }
+    .ip-card .btn:active{ opacity:.7; transform:scale(.97); }
+    .ip-card .btn-primary{ background:var(--ink); color:var(--bg); }
+    .ip-card .btn-secondary{ background:transparent; color:var(--ink); }
+
+    .ip-card .tagline{ font-size:12px; color:var(--ink-soft); letter-spacing:.06em; }
+    .ip-card .footer{ display:flex; justify-content:space-between; align-items:baseline; margin-top:8px; }
+    .ip-card .site{ font-size:17px; font-weight:800; }
+    .ip-card .studio-tag{
+      display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted);
+      letter-spacing:.1em; font-weight:700; margin-top:10px;
+    }
+    .ip-card .studio-tag svg{ width:12px; height:12px; opacity:.7; }
+
+    .ip-card .toast{
+      position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(12px);
+      background:var(--ink); color:var(--bg); font-size:13px; font-weight:700;
+      padding:11px 18px; border-radius:2px; opacity:0; pointer-events:none;
+      transition:opacity .2s ease, transform .2s ease; white-space:nowrap; z-index:999;
+    }
+    .ip-card .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  </style>
+
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg">
+    <filter id="ipNoise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.9 0"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#ipNoise)"/>
+  </svg>
+
+  <div class="card">
+    <div class="top-row">
+      <span>PHOTO / FILM / BRANDING</span>
+      <svg class="aperture" viewBox="-20 -20 40 40" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="0,-14 12.12,-7 12.12,7 0,14 -12.12,7 -12.12,-7" fill="none" stroke="currentColor" stroke-width="2.2"/>
+        <circle cx="0" cy="0" r="3" fill="currentColor"/>
+      </svg>
+    </div>
+
+    <div class="badge-wrap">
+      <svg class="badge" viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg">
+        <rect x="-90" y="-90" width="180" height="180" rx="16" fill="none" stroke="currentColor" stroke-width="4"/>
+        <path d="M -100,-80 L -100,-100 L -80,-100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+        <path d="M 100,-80 L 100,-100 L 80,-100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+        <path d="M -100,80 L -100,100 L -80,100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+        <path d="M 100,80 L 100,100 L 80,100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+        <g transform="skewX(-8)">
+          <text x="0" y="29" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="90" fill="currentColor">IN</text>
+        </g>
+      </svg>
+    </div>
+    <div class="brand-name">INSTUDIO</div>
+
+    <svg class="sprocket" viewBox="0 0 400 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="ipSprocket" width="18" height="12" patternUnits="userSpaceOnUse">
+          <rect x="0" y="1" width="10" height="10" rx="2" fill="currentColor"/>
+        </pattern>
+      </defs>
+      <rect width="400" height="12" fill="url(#ipSprocket)"/>
+    </svg>
+
+    <div class="name-block">
+      <span class="name-ko">박인호</span><span class="role">대표 포토그래퍼</span>
+    </div>
+    <div class="name-en">INHO<br>PARK</div>
+
+    <ul class="contact-list">
+      <li>
+        <a href="mailto:photoinnho@gmail.com">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 6l8 7 8-7"/></svg>
+          photoinnho@gmail.com
+        </a>
+      </li>
+      <li>
+        <a href="tel:+821024972859">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg>
+          010-2497-2859
+        </a>
+      </li>
+    </ul>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="ipSaveContactBtn" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>
+        연락처 저장
+      </button>
+      <a class="btn btn-secondary" href="https://www.instudio.kr" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>
+        웹사이트 방문
+      </a>
+    </div>
+
+    <svg class="sprocket" viewBox="0 0 400 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="400" height="12" fill="url(#ipSprocket)"/>
+    </svg>
+
+    <div class="tagline">A STUDIO FOR COMMERCIAL STORYTELLING</div>
+    <div class="footer">
+      <span class="site">WWW.INSTUDIO.KR</span>
+    </div>
+    <div class="studio-tag">
+      <svg viewBox="-20 -20 40 40" xmlns="http://www.w3.org/2000/svg"><polygon points="0,-14 12.12,-7 12.12,7 0,14 -12.12,7 -12.12,-7" fill="none" stroke="currentColor" stroke-width="3"/></svg>
+      INSTUDIO · 아이엔스튜디오
+    </div>
+  </div>
+
+  <div class="toast" id="ipToast">연락처가 저장되었습니다</div>
+</div>
+
+<script>
+(function(){
+  function buildVCard(){
+    return [
+      "BEGIN:VCARD","VERSION:3.0",
+      "N:박인호;;;;",
+      "FN:박인호 (Inho Park)",
+      "ORG:INSTUDIO 아이엔스튜디오",
+      "TITLE:대표 포토그래퍼",
+      "TEL;TYPE=CELL,VOICE:010-2497-2859",
+      "EMAIL;TYPE=INTERNET:photoinnho@gmail.com",
+      "URL:https://www.instudio.kr",
+      "NOTE:A studio for commercial storytelling — Photo / Film / Branding",
+      "END:VCARD"
+    ].join("\r\n");
+  }
+  var btn = document.getElementById('ipSaveContactBtn');
+  if(btn){
+    btn.addEventListener('click', function(){
+      var blob = new Blob([buildVCard()], { type: "text/vcard;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = "InhoPark-INSTUDIO.vcf";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+      var toast = document.getElementById('ipToast');
+      toast.classList.add('show');
+      setTimeout(function(){ toast.classList.remove('show'); }, 2200);
+    });
+  }
+})();
+</script>

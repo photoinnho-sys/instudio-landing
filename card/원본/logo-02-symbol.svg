@@ -1,0 +1,13 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect x="0" y="0" width="400" height="400" fill="#ECE8DE"/>
+  <g style="color:#242019" transform="translate(200,200)">
+    <rect x="-90" y="-90" width="180" height="180" rx="16" fill="none" stroke="currentColor" stroke-width="4"/>
+    <path d="M -100,-80 L -100,-100 L -80,-100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+    <path d="M 100,-80 L 100,-100 L 80,-100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+    <path d="M -100,80 L -100,100 L -80,100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+    <path d="M 100,80 L 100,100 L 80,100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+    <g transform="skewX(-8)">
+      <text x="0" y="29" text-anchor="middle" font-weight="900" font-size="90" fill="currentColor">IN</text>
+    </g>
+  </g>
+</svg>

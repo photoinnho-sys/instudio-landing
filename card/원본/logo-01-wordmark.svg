@@ -1,0 +1,8 @@
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect x="0" y="0" width="600" height="300" fill="#ECE8DE"/>
+  <g style="color:#242019" transform="translate(300,150)">
+    <text x="0" y="15" text-anchor="middle" font-weight="900" font-size="72" letter-spacing="2" fill="currentColor">INSTUDIO</text>
+    <rect x="-90" y="42" width="180" height="3" fill="currentColor"/>
+    <text x="0" y="76" text-anchor="middle" font-weight="700" font-size="14" letter-spacing="4" fill="currentColor" opacity="0.75">PHOTO &#183; FILM &#183; BRANDING</text>
+  </g>
+</svg>

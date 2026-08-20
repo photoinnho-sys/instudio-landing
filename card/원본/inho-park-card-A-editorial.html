@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>박인호 | INSTUDIO — Digital Card (A. Editorial)</title>
+<style>
+  :root{
+    --bg:#ECE8DE;
+    --ink:#242019;
+    --ink-soft:#4A453C;
+    --line:#C9C3B4;
+    --muted:#8B8577;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    min-height:100%;
+  }
+  body{
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 48px;
+  }
+  .frame{
+    position:relative;
+    width:100%;
+    max-width:420px;
+    padding:26px 22px 30px;
+  }
+  .frame::before, .frame::after,
+  .frame .br1, .frame .br2{
+    content:"";
+    position:absolute;
+    width:18px; height:18px;
+    border:2px solid var(--ink);
+  }
+  .frame::before{ top:0; left:0; border-right:none; border-bottom:none; }
+  .frame::after{ top:0; right:0; border-left:none; border-bottom:none; }
+  .frame .br1{ bottom:0; left:0; border-right:none; border-top:none; }
+  .frame .br2{ bottom:0; right:0; border-left:none; border-top:none; }
+
+  .card > *{
+    opacity:0;
+    animation:fadeUp .55s ease forwards;
+  }
+  .card > *:nth-child(1){animation-delay:.02s}
+  .card > *:nth-child(2){animation-delay:.09s}
+  .card > *:nth-child(3){animation-delay:.16s}
+  .card > *:nth-child(4){animation-delay:.23s}
+  .card > *:nth-child(5){animation-delay:.30s}
+  .card > *:nth-child(6){animation-delay:.37s}
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:translateY(0);} }
+
+  .top-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:11px;
+    letter-spacing:.12em;
+    font-weight:700;
+    color:var(--ink-soft);
+    margin-bottom:34px;
+  }
+  .mini-mark{
+    font-weight:900;
+    font-size:15px;
+    letter-spacing:0;
+    transform:skewX(-8deg);
+    display:inline-block;
+  }
+
+  .hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:22px;
+  }
+  .hero-type .name-ko{
+    display:block;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.2em;
+    color:var(--muted);
+    margin-bottom:6px;
+  }
+  .hero-type .name-en{
+    font-size:56px;
+    font-weight:900;
+    line-height:.92;
+    letter-spacing:-.02em;
+  }
+  .hero-role{
+    writing-mode:vertical-rl;
+    text-orientation:mixed;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.25em;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    padding-bottom:4px;
+  }
+
+  .spec{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:16px 0;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-bottom:26px;
+  }
+  .spec-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:12px;
+  }
+  .spec-row .label{
+    color:var(--muted);
+    letter-spacing:.16em;
+    font-size:10px;
+    font-weight:800;
+    flex:none;
+  }
+  .spec-row .value{
+    font-weight:700;
+    font-size:14px;
+    text-align:right;
+    color:var(--ink);
+    text-decoration:none;
+  }
+
+  .actions{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:26px;
+  }
+  .btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    padding:15px 18px;
+    font-size:14px;
+    font-weight:800;
+    letter-spacing:.02em;
+    text-decoration:none;
+    border:1.5px solid var(--ink);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:opacity .15s ease, transform .15s ease;
+    clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+  }
+  .btn:active{opacity:.7; transform:scale(.97);}
+  .btn-primary{ background:var(--ink); color:var(--bg); }
+  .btn-secondary{ background:transparent; color:var(--ink); }
+
+  .sprocket{
+    width:100%;
+    height:10px;
+    display:block;
+    color:var(--line);
+    margin-bottom:16px;
+  }
+
+  .footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+  }
+  .tagline{
+    font-size:11px;
+    color:var(--ink-soft);
+    letter-spacing:.06em;
+    max-width:200px;
+  }
+  .site{
+    font-size:16px;
+    font-weight:800;
+    text-align:right;
+  }
+
+  .toast{
+    position:fixed; left:50%; bottom:28px;
+    transform:translateX(-50%) translateY(12px);
+    background:var(--ink); color:var(--bg);
+    font-size:13px; font-weight:700; padding:11px 18px;
+    opacity:0; pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+    white-space:nowrap;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+  <div class="frame">
+    <span class="br1"></span><span class="br2"></span>
+    <div class="card">
+
+      <div class="top-row">
+        <span>PHOTO / FILM / BRANDING</span>
+        <span class="mini-mark">IN</span>
+      </div>
+
+      <div class="hero">
+        <div class="hero-type">
+          <span class="name-ko">박인호</span>
+          <div class="name-en">INHO<br>PARK</div>
+        </div>
+        <div class="hero-role">대표 포토그래퍼</div>
+      </div>
+
+      <div class="spec">
+        <div class="spec-row">
+          <span class="label">EMAIL</span>
+          <a class="value" href="mailto:photoinnho@gmail.com">photoinnho@gmail.com</a>
+        </div>
+        <div class="spec-row">
+          <span class="label">PHONE</span>
+          <a class="value" href="tel:+821024972859">010-2497-2859</a>
+        </div>
+        <div class="spec-row">
+          <span class="label">STUDIO</span>
+          <span class="value">INSTUDIO 아이엔스튜디오</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="saveContactBtn" type="button">연락처 저장</button>
+        <a class="btn btn-secondary" href="https://www.instudio.kr" target="_blank" rel="noopener">웹사이트 방문</a>
+      </div>
+
+      <svg class="sprocket" viewBox="0 0 400 10" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="sprocketPatternA" width="16" height="10" patternUnits="userSpaceOnUse">
+            <rect x="0" y="1" width="9" height="8" rx="1.5" fill="currentColor"/>
+          </pattern>
+        </defs>
+        <rect width="400" height="10" fill="url(#sprocketPatternA)"/>
+      </svg>
+
+      <div class="footer">
+        <div class="tagline">A STUDIO FOR<br>COMMERCIAL STORYTELLING</div>
+        <div class="site">WWW.INSTUDIO.KR</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast" id="toast">연락처가 저장되었습니다</div>
+
+<script>
+  function buildVCard(){
+    return [
+      "BEGIN:VCARD","VERSION:3.0",
+      "N:박인호;;;;",
+      "FN:박인호 (Inho Park)",
+      "ORG:INSTUDIO 아이엔스튜디오",
+      "TITLE:대표 포토그래퍼",
+      "TEL;TYPE=CELL,VOICE:010-2497-2859",
+      "EMAIL;TYPE=INTERNET:photoinnho@gmail.com",
+      "URL:https://www.instudio.kr",
+      "NOTE:A studio for commercial storytelling — Photo / Film / Branding",
+      "END:VCARD"
+    ].join("\r\n");
+  }
+  document.getElementById('saveContactBtn').addEventListener('click', function(){
+    var blob = new Blob([buildVCard()], { type: "text/vcard;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = "InhoPark-INSTUDIO.vcf";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+    var toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(function(){ toast.classList.remove('show'); }, 2200);
+  });
+</script>
+</body>
+</html>

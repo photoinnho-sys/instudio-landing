@@ -1,0 +1,74 @@
+<svg viewBox="0 0 1200 1520" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <!-- Concept 01: Wordmark (font-based) -->
+    <g id="logo0">
+      <text x="0" y="15" text-anchor="middle" font-weight="900" font-size="72" letter-spacing="2" fill="currentColor">INSTUDIO</text>
+      <rect x="-90" y="42" width="180" height="3" fill="currentColor"/>
+      <text x="0" y="76" text-anchor="middle" font-weight="700" font-size="14" letter-spacing="4" fill="currentColor" opacity="0.75">PHOTO &#183; FILM &#183; BRANDING</text>
+    </g>
+
+    <!-- Concept 02: Symbol mark -->
+    <g id="logo1">
+      <rect x="-90" y="-90" width="180" height="180" rx="16" fill="none" stroke="currentColor" stroke-width="4"/>
+      <path d="M -100,-80 L -100,-100 L -80,-100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+      <path d="M 100,-80 L 100,-100 L 80,-100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+      <path d="M -100,80 L -100,100 L -80,100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+      <path d="M 100,80 L 100,100 L 80,100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+      <g transform="skewX(-8)">
+        <text x="0" y="29" text-anchor="middle" font-weight="900" font-size="90" fill="currentColor">IN</text>
+      </g>
+    </g>
+
+    <!-- Concept 03: Graphic mark (symbol + wordmark + film strip) -->
+    <g id="logo2">
+      <polygon points="0,-125 26,-110 26,-80 0,-65 -26,-80 -26,-110" fill="none" stroke="currentColor" stroke-width="4"/>
+      <circle cx="0" cy="-95" r="6" fill="currentColor"/>
+      <text x="0" y="20" text-anchor="middle" font-weight="900" font-size="58" letter-spacing="1.5" fill="currentColor">INSTUDIO</text>
+      <g>
+        <rect x="-103" y="58" width="14" height="12" rx="2" fill="currentColor"/>
+        <rect x="-79" y="58" width="14" height="12" rx="2" fill="currentColor"/>
+        <rect x="-55" y="58" width="14" height="12" rx="2" fill="currentColor"/>
+        <rect x="-31" y="58" width="14" height="12" rx="2" fill="currentColor"/>
+        <rect x="-7" y="58" width="14" height="12" rx="2" fill="currentColor"/>
+        <rect x="17" y="58" width="14" height="12" rx="2" fill="currentColor"/>
+        <rect x="41" y="58" width="14" height="12" rx="2" fill="currentColor"/>
+        <rect x="65" y="58" width="14" height="12" rx="2" fill="currentColor"/>
+        <rect x="89" y="58" width="14" height="12" rx="2" fill="currentColor"/>
+      </g>
+    </g>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="1520" fill="#F5F3EF"/>
+
+  <text x="600" y="55" text-anchor="middle" font-weight="800" font-size="30" fill="#242019">INSTUDIO 로고 컨셉 3안</text>
+  <text x="600" y="82" text-anchor="middle" font-weight="600" font-size="13" letter-spacing="2" fill="#8B8577">아이엔스튜디오 &#183; PHOTO / FILM / BRANDING</text>
+
+  <!-- Row 1 -->
+  <text x="60" y="130" font-weight="800" font-size="18" fill="#242019">01 &#8212; 폰트 로고형 (Wordmark)</text>
+  <rect x="60" y="150" width="520" height="360" rx="4" fill="#ECE8DE" stroke="#D8D3C4" stroke-width="1"/>
+  <rect x="620" y="150" width="520" height="360" rx="4" fill="#242019"/>
+  <text x="60" y="532" font-weight="700" font-size="11" letter-spacing="2" fill="#8B8577">LIGHT</text>
+  <text x="620" y="532" font-weight="700" font-size="11" letter-spacing="2" fill="#8B8577">DARK</text>
+  <g style="color:#242019" transform="translate(320,330)"><use href="#logo0"/></g>
+  <g style="color:#ECE8DE" transform="translate(880,330)"><use href="#logo0"/></g>
+
+  <!-- Row 2 -->
+  <text x="60" y="590" font-weight="800" font-size="18" fill="#242019">02 &#8212; 심볼형 (Symbol)</text>
+  <rect x="60" y="610" width="520" height="360" rx="4" fill="#ECE8DE" stroke="#D8D3C4" stroke-width="1"/>
+  <rect x="620" y="610" width="520" height="360" rx="4" fill="#242019"/>
+  <text x="60" y="992" font-weight="700" font-size="11" letter-spacing="2" fill="#8B8577">LIGHT</text>
+  <text x="620" y="992" font-weight="700" font-size="11" letter-spacing="2" fill="#8B8577">DARK</text>
+  <g style="color:#242019" transform="translate(320,790)"><use href="#logo1"/></g>
+  <g style="color:#ECE8DE" transform="translate(880,790)"><use href="#logo1"/></g>
+
+  <!-- Row 3 -->
+  <text x="60" y="1050" font-weight="800" font-size="18" fill="#242019">03 &#8212; 그래픽형 (Graphic)</text>
+  <rect x="60" y="1070" width="520" height="360" rx="4" fill="#ECE8DE" stroke="#D8D3C4" stroke-width="1"/>
+  <rect x="620" y="1070" width="520" height="360" rx="4" fill="#242019"/>
+  <text x="60" y="1452" font-weight="700" font-size="11" letter-spacing="2" fill="#8B8577">LIGHT</text>
+  <text x="620" y="1452" font-weight="700" font-size="11" letter-spacing="2" fill="#8B8577">DARK</text>
+  <g style="color:#242019" transform="translate(320,1250)"><use href="#logo2"/></g>
+  <g style="color:#ECE8DE" transform="translate(880,1250)"><use href="#logo2"/></g>
+
+  <text x="600" y="1500" text-anchor="middle" font-size="11" letter-spacing="1" fill="#8B8577">INSTUDIO &#183; 아이엔스튜디오 &#8212; LOGO CONCEPTS 2026</text>
+</svg>

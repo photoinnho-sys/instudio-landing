@@ -24,6 +24,11 @@
 
 /* ── 바탕 ─────────────────────────────────────────────────────── */
 html,body.doz_sys{background:var(--is-bg)!important}
+/* 아임웹 격자(.doz_row)가 좌우 -10px 음수 마진을 써서 폰에서 문서가 410px 이
+   된다(화면 390). 가로 스크롤이 생긴다.
+   overflow-x:clip 은 hidden 과 달리 스크롤 컨테이너를 만들지 않아 안쪽
+   position:sticky 를 죽이지 않는다 — 랜딩의 핀들이 그대로 산다. */
+body.doz_sys{overflow-x:clip}
 body.doz_sys,body.doz_sys .inside,body.doz_sys .section_wrap{
   color:rgba(244,239,250,.88)!important}
 /* 검정으로 칠해둔 섹션을 우리 바탕색으로 */

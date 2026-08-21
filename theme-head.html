@@ -67,6 +67,15 @@ body.doz_sys h1,body.doz_sys h2,body.doz_sys h3,body.doz_sys h4{
    그 순간 크기·굵기가 16px/400 → 14.5px/600 으로 점프한다. 그게 깜빡임의 정체다.
    링크에는 처음부터 _fade_link 가 붙어 있으므로 첫 페인트부터 같은 모양이 된다.
    (카테고리 알약은 .btn.btn-primary 규칙이 특이도로 이겨서 영향받지 않는다) */
+/* 로고 워드마크 — 아임웹 기본 'imweb Sans' 18px 이 그대로 나오고 있었다.
+   내비(15px/600)보다 한 단 위로 잡아 헤더 안에서 위계가 생기게 한다.
+   텍스트 내용 자체는 아임웹 로고 위젯 설정에서 관리한다. */
+.logo_title a{font-family:'PreKR',-apple-system,sans-serif!important;
+  font-size:17px!important;font-weight:800!important;
+  letter-spacing:.10em!important;text-transform:uppercase;
+  white-space:nowrap}
+@media(max-width:680px){.logo_title a{font-size:15px!important;letter-spacing:.08em!important}}
+
 a._fade_link{font-size:15px!important;font-weight:600!important;
   letter-spacing:.04em!important;text-transform:uppercase;
   text-shadow:0 1px 14px rgba(0,0,0,.65);
